@@ -177,5 +177,74 @@ background(204, 226, 225);
 fill(255, 0, 0, 160);
 ellipse(132, 82, 200, 200);
 fill(0, 255, 0, 160);
+ellipse(268, -16, 200, 200);
+fill(0, 0, 255, 160);
 ellipse(268, 118, 200, 200);
 ```
+
+## 形を作る
+複数の点をつなぎ合わせて、新しい形を定義してみましょう
+
+```java
+// 矢印を描く
+size(480, 120);
+beginShape();
+vertex(180, 82);
+vertex(207, 36);
+vertex(214, 63);
+vertex(407, 11);
+vertex(412, 30);
+vertex(219, 82);
+vertex(226, 109);
+endShape();
+```
+
+`endShape()` に `CLOSE` を付け加えるとパスが閉じます
+```java
+// 隙間を閉じる
+endShape(CLOSE);
+```
+
+```java
+// 生物の創造
+size(480, 120);
+
+// 左の生き物
+fill(153, 176, 180);
+beginShape();
+vertex(50, 120);
+vertex(100, 90);
+vertex(110, 60);
+vertex(80, 20);
+vertex(210, 60);
+vertex(160, 80);
+vertex(200, 90);
+vertex(140, 100);
+vertex(130, 120);
+endShape();
+fill(0);
+ellipse(155, 60, 8, 8);
+
+// 右の生き物
+fill(176, 186, 163);
+beginShape();
+vertex(370, 120);
+vertex(360, 90);
+vertex(290, 80);
+vertex(340, 70);
+vertex(280, 50);
+vertex(420, 10);
+vertex(390, 50);
+vertex(410, 90);
+vertex(460, 120);
+endShape();
+fill(0);
+ellipse(345, 50, 10, 10);
+```
+
+## コメント
+
+```java
+// ダブルスラッシュの後ろに描かれたテキストは実行時に無視されます
+```
+
