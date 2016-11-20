@@ -1,5 +1,5 @@
 # Processingをはじめよう 第2版
-## Table of Contents
+## 目次
 1. ようこそ Processing へ
 2. コードを書いてみよう
 3. 描く
@@ -14,5 +14,5 @@
 12. データ
 13. 拡張
 
-## Link
+## リンク
 - [Processingをはじめよう 第2版](https://www.oreilly.co.jp/books/9784873117737/) - O'reilly japan
