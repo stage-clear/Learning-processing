@@ -163,3 +163,341 @@ void draw() {
 ```
 
 ## クリック
+ボタンが押されると `mousePressed` 変数が変化します。
+取り得る値は `true` か `false` です。
+
+```java
+// マウスをクリック
+void setup() {
+  size(240, 120);
+  strokeWeight(30);
+}
+
+void draw() {
+  background(204);
+  stroke(102);
+  line(40, 0, 70, height);
+  if (mousePressed == true) {
+    stroke(0);
+  }
+  line(0, 70, width, 50);
+}
+```
+- [mousePressed](https://processing.org/reference/mousePressed.html)
+- [height](https://processing.org/reference/height.html)
+- [width](https://processing.org/reference/width.html)
+
+```java
+// クリックされていないことを検出する
+void setup() {
+  size(240, 120);
+  strokeWeight(30);
+}
+
+void draw() {
+  background(204);
+  stroke(102);
+  line(40, 0, 70, height);
+  if (mousePressed) {
+    stroke(0);
+  } else {
+    stroke(255);
+  }
+  line(0, 70, width, 50);
+}
+```
+
+```java
+// 複数のマウスボタン
+void setup() {
+  size(120, 120);
+  strokeWeight(30);
+}
+
+void draw() {
+  background(204);
+  stroke(102);
+  line(40, 0, 70, height);
+  if (mousePressed) {
+    if (mouseButton == LEFT) {
+      stroke(255);
+    } else {
+      stroke(0);
+    }
+  }
+  line(0, 70, width, 50);
+}
+```
+
+```java
+// if - else の構造はいくつも増やすことができます
+if (test) {
+ statements
+}
+
+if (test) {
+  statements 1
+} else {
+  statements 2
+}
+
+if (test 1) {
+  statements 1
+} else if (test 2) {
+  statements 2
+}
+```
+
+## カーソルの位置
+```java
+// カーソルを探せ
+float x;
+int offset = 10;
+
+void setup() {
+  size(240, 120);
+  x = width / 2;
+}
+
+void draw() {
+  background(204);
+  if (mouseX > x) {
+    x += 0.5;
+    offset = -10;
+  }
+  
+  if (mouseX < x) {
+    x -= 0.5;
+    offset = 10;
+  }
+  
+  line(x, 0, x, height);
+  line(mouseX, mouseY, mouseX + offset, mouseY - 10);
+  line(mouseX, mouseY, mouseX + offset, mouseY + 10);
+  line(mouseX, mouseY, mouseX + offset * 3, mouseY);
+}
+```
+
+```java
+// 円の境界
+int x = 120;
+int y = 60;
+int radius = 12;
+
+void setup() {
+  size(240, 120);
+  ellipseMode(RADIUS);
+}
+
+void draw() {
+  background(204);
+  float d = dist(mouseX, mouseY, x, y);
+  if (d < radius) {
+    radius++;
+    fill(0);
+  } eles {
+    fill(255);
+  }
+  ellipse(x, y, radius, radius);
+}
+```
+
+```java
+// 長方形の境界
+int x = 80;
+int y = 30;
+int w = 80;
+int h = 60;
+
+void setup() {
+  size(240, 120);
+}
+
+void draw() {
+  background(204);
+  if ((mouseX > x) && (mouseX < x + w) &&
+    (mouseY > y) && (mouseY < y + h)) {
+    fill(0);
+  } else {
+    fill(255);
+  }
+  rect(x, y, w, h);
+}
+```
+
+## キーボードからの入力
+```java
+// キーを叩く
+void setup() {
+  size(240, 120);
+}
+
+void draw() {
+  background(204);
+  line(20, 20, 220, 100);
+  if (keyPressed) {
+    line(220, 20, 20, 100);
+  }
+}
+```
+
+押されたキーがどれかは、`key` 変数を見るとわかります。
+`key` のデータ型は `char` です。char型は英数字を1文字だけ格納できます。
+文字列はダブルクオートで囲って表記しますが、char型は __シングルクオート__ です。
+
+```java
+void setup() {
+  size(120, 120);
+  textSize(64);
+  textAlign(CENTER);
+}
+
+void draw() {
+  background(0);
+  text(key, 60, 80);
+}
+```
+
+- [textSize()](https://processing.org/reference/textSize_.html) - 文字の大きさを指定します
+- [textAlign()](https://processing.org/reference/textAlign_.html) - テキストの水平位置を指定します
+
+```java
+// 特定のキーに反応する
+void setup() {
+  size(120, 120);
+}
+
+void draw() {
+  background(204);
+  if (keyPressed) {
+    if ((key == 'h') || (key == 'H')) {
+      line(30, 60, 90, 60);
+    }
+    if ((key == 'n') || (key == 'N')) {
+      line(30, 20, 90, 100);
+    }
+    line(30, 20, 30, 100);
+    line(90, 20, 90, 100);
+  }
+}
+```
+
+- [keyCode](https://processing.org/reference/keyCode.html)
+
+```java
+// カーソルキーで動かす
+int x = 215;
+
+void setup() {
+  size(480, 120);
+}
+
+void draw() {
+  if (keyPressed && (key == CODED)) { // コードかされたキーか
+    if (keyCode == LEFT) { // 左方向キーか
+      x--;
+    } else if (keyCode == RIGHT) { // 右方向キーか
+      x++;
+    }
+  }
+  rect(x, 45, 50, 50);
+}
+```
+
+## マッピング
+```java
+// 値の範囲を変更
+void setup() {
+  size(240, 120);
+  strokeWeight(12);
+}
+
+void draw() {
+  background(204);
+  stroke(102);
+  line(mouseX, 0, mouseX, height); // 灰色の線
+  stroke(0);
+  float mx = mouseX / 2 + 60;
+  line(mx, 0, mx, height); // 黒い線
+}
+```
+
+```java
+// map() 関数でマッピング
+void setup() {
+  size(240, 120);
+  strokeWeight(12);
+}
+
+void draw() {
+  background(204);
+  stroke(102);
+  line(mouseX, 0, mouseX, height); // 灰色の線
+  stroke(0);
+  
+  float mx = map(mouseX, 0, width, 60, 180);
+  // 入力値(mouseX)を元の範囲(0 ~ width) から (60 ~ 180)の範囲にコンバートする
+
+  line(mx, 0, mx, height);
+}
+```
+- [map()](https://processing.org/reference/map_.html)
+
+## Robot 3: Response
+
+```java
+float x = 60;
+float y = 440;
+int radius = 45;
+int bodyHeight = 160;
+int neckHeight = 70;
+
+float easing = 0.04;
+
+void setup() {
+  size(360, 480);
+  ellipseMode(RADIUS);
+}
+
+void draw() {
+  strokeWeight(2);
+  
+  int targetX = mouseX;
+  x += (targetX - x) * easing;
+  
+  if (mousePressed) {
+    neckHeight = 16;
+    bodyHeight = 90;
+  } else {
+    neckHeight = 70;
+    bodyHeight = 160;
+  }
+  
+  float neckY = y - bodyHeight - neckHeight - radius;
+  background(0, 153, 204);
+  
+  // Neck
+  stroke(255);
+  line(x + 12, y - bodyHeight, x + 12, neckY);
+  
+  // Antena
+  line(x + 12, neckY, x - 18, neckY - 43);
+  line(x + 12, neckY, x + 42, neckY - 99);
+  line(x + 12, neckY, x + 78, neckY + 15);
+  
+  // Body
+  noStroke();
+  fill(255, 204, 0);
+  ellipse(x, y - 33, 33, 33);
+  fill(0);
+  rect(x - 45, y - bodyHeight, 90, bodyHeight - 33);
+  
+  // Head
+  fill(0);
+  ellipse(x + 12, neckY, radius, radius);
+  fill(255);
+  ellipse(x + 24, neckY - 6, 14, 14);
+  fill(0);
+  ellipse(x + 24, neckY - 6, 3, 3);
+}
+```
