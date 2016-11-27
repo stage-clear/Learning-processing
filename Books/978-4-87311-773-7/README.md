@@ -1,13 +1,13 @@
 # Processingをはじめよう 第2版
 ## 目次
-1. ようこそ Processing へ
-2. コードを書いてみよう
-3. [描く](03/README.md)
-4. [変数](04/README.md)
-5. [反応](05/README.md)
-6. [移動、回転、伸縮](06/README.md)
-7. [メディア](07/README.md)
-8. 動き
+1. ようこそ Processing へ _Hello_
+2. コードを書いてみよう _Starting to Code_
+3. [描く](03/README.md) _Draw_
+4. [変数](04/README.md) _Variables_
+5. [反応](05/README.md) _Response_
+6. [移動、回転、伸縮](06/README.md) _Translate, Rotate, Scale_
+7. [メディア](07/README.md) _Media_
+8. [動き](08/README.md) _Motion_
 9. 関数
 10. オブジェクト
 11. 配列
