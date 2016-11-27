@@ -140,3 +140,133 @@ void draw() {
   text("That's one small step for man...", 26, 24, 240, 100);
 }
 ```
+
+```java
+// テキストを String 変数に記憶する
+PFont font;
+String quote = "That's one small step for man...";
+
+void setup() {
+  size(480, 120);
+  font = createFont("SourceCodePro-Regular.ttf", 24);
+  textFont(font);
+}
+
+void draw() {
+  background(102);
+  text(quote, 26, 24, 240, 100);
+}
+```
+
+## ベクタ画像
+
+1. SVGファイルを data フォルダへ追加
+2. ベクタデータを格納する PShape 変数を作成
+3. loadShape() でデータを変数に読み込む
+
+```java
+// ベクタ画像を描く
+PShape network;
+
+void setup() {
+  size(480, 120);
+  network = loadShape("network.svg");
+}
+
+void draw() {
+  background(0);
+  shape(network, 30, 10);
+  shape(network, 180, 10, 280, 280);
+}
+```
+
+```java
+// ベクタ画像の拡大縮小
+PShape network;
+
+void setup() {
+  size(240, 120);
+  shapeMode(CENTER);
+  network = loadShape("network.svg");
+}
+
+void draw() {
+  background(0);
+  float diameter = map(mouseX, 0, width, 10, 800);
+  shape(network, 120, 60, diameter, diameter);
+}
+```
+
+> Processing の SVGサポートは完全ではありません。
+
+- [PShape](https://processing.org/reference/PShape.html)
+
+```java
+// 新しい形を作る
+PShape dino;
+
+void setup() {
+  size(480, 120);
+  dino = createShape();
+  dino.beginShape();
+  dino.fill(153, 176, 180);
+  dino.vertex(50, 120);
+  dino.vertex(100, 90);
+  dino.vertex(110, 60);
+  dino.vertex(80, 20);
+  dino.vertex(210, 60);
+  dino.vertex(160, 80);
+  dino.vertex(200, 90);
+  dino.vertex(140, 100);
+  dino.vertex(130, 120);
+  dino.endShape();
+}
+
+void draw() {
+  background(204);
+  translate(mouseX - 120, 0);
+  shape(dino, 0, 0);
+}
+```
+- [createShape()](https://processing.org/reference/createShape_.html)
+
+## Robot5: Media
+
+```java
+PShape bot1;
+PShape bot2;
+PShape bot3;
+PImage: landscape;
+
+float easing = 0.05;
+float offset = 0;
+
+void setup() {
+  size(720, 480);
+  bot1 = loadShape("robot1.svg");
+  bot2 = loadShape("robot2.svg");
+  bot3 = loadShape("robot3.svg");
+  landscape = loadImage("alpine.png");
+}
+
+void draw() {
+  // "landscape" を背景にします
+  // この画像はウィンドウと同じ大きさにする必要があります
+  background(landscape);
+  
+  // 左右の間隔を設定し、イージングによって滑らかに移動させます
+  flaot targetOffset = map(mouseY, 0, height, -40, 40);
+  offset += (targetOffset - offset) * easing;
+  
+  // 左のロボットを描きます
+  shape(bot1, 85 + offset, 65);
+  
+  // 右のロボットは少し小さく描き、オフセットも少なくします
+  float smallerOffset = offset * 0.7;
+  shape(bot2, 510 + smallerOffset, 140, 78, 248);
+  
+  // 一番小さいロボットを描きます。オフセットは最小です
+  smallerOffset += -0.5;
+  shape(bot3, 410 + smallerOffset, 225, 39, 124);
+}
+```
