@@ -8,7 +8,7 @@
 6. [移動、回転、伸縮](06/README.md) _Translate, Rotate, Scale_
 7. [メディア](07/README.md) _Media_
 8. [動き](08/README.md) _Motion_
-9. 関数
+9. [関数](09/README.md) _Functions_
 10. オブジェクト
 11. 配列
 12. データ
