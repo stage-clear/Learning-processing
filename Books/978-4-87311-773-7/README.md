@@ -10,9 +10,9 @@
 8. [動き](08/README.md) _Motion_
 9. [関数](09/README.md) _Functions_
 10. [オブジェクト](10/README.md) _Objcts_
-11. 配列
-12. データ
-13. 拡張
+11. [配列](11/README.md) _Array_
+12. データ _Data_
+13. 拡張 _Extend_
 
 ## リンク
 - [Processingをはじめよう 第2版](https://www.oreilly.co.jp/books/9784873117737/) - O'reilly japan
