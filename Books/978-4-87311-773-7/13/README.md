@@ -103,3 +103,59 @@ void draw() {
 ```
 
 ## 画像やPDFの保存
+デフォルトの画像フォーマットは TIFF です。
+
+```java
+saveFrame("output-####.png");
+saveFrame("frames/output-####.png");
+```
+
+> `draw()` のなかで `saveFrame()` を実行すると、フレームごとに新しいファイルが作成されます。
+> 長時間実行すると、スケッチフォルダが数千のファイルで埋め尽くされてしまうので、注意しましょう
+
+```java
+// 画像の保存
+PShape bot;
+float x = 0;
+
+void setup() {
+  size(720, 480);
+  bot = loadShape("robot1.svg");
+  frameRate(30);
+}
+
+void draw() {
+  translate(x, 0);
+  shape(bot, 0, 80);
+  saveFrame("frames/SaveExample-####.tif");
+  x += 12;
+  
+  if (frameCount > 60) {
+    exit();
+  }
+}
+```
+
+```java
+// PDF として描く
+// 描画結果は画面に現れず、スケッチフォルダ内のPDFに直接出力されます
+import processing.pdf.*;
+PShape bot;
+
+void setup() {
+  size(600, 800, PDF, "Ex-13-5.pdf");
+  bot = loadShape("robot1.svg");
+}
+
+void draw() {
+  background(0, 153, 204);
+  for (int i = 0; i < 100; i++) {
+    float rx = random(-bot.width, width);
+    float ry = random(-bot.height, height);
+    shape(bot, rx, ry);
+  }
+  exit();
+}
+```
+
+このほかにもPDF出力のテクニック
