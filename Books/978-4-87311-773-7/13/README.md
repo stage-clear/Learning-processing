@@ -162,3 +162,49 @@ void draw() {
 Fileメニューの「Example」から Library → PDF Export の項を参照してください。
 
 ## Arduino へようこそ
+
+```java
+// このコードは Arduino 用です（Processing では動きません）
+
+int sensorPin = 0; // 入力ピン
+int val = 0;
+
+void setup() {
+  Serial.begin(9600); // シリアルポートを開く
+}
+
+void loop() {
+  val = analogRead(sensorPin) / 4;  // センサを読む
+  Serial.write((byte)vala);         // 値を送信
+  delay(100);                       // 100ミリ待つ
+}
+```
+
+```java
+// シリアルポートからのデータ
+import processing.serial.*;
+
+Serial port;      // Serial クラスのオブジェクト
+float val;        // シリアルポートから受信したデータ
+
+void setup() {
+  size(440, 220);
+  // 重要
+  // Serial.list() で取得したリストの、最初のシリアルポートが Arduino ボード
+  // のはずですが、実行環境によってはそうならないことがあります。
+  // 動作しない場合は println(Serial.list()); を実行して、シリアルポート
+  // の状態を確認し、次の行の [0] を、Arduino ボードが接続されているポート
+  // の番号へ変更します。
+  println(Serial.list()); // リストが表示される
+  String arduinoPort = Serial.list()[0]
+  port = new Serial(this, arduinoPort, 9600);
+}
+
+void draw() {
+  if (port.available() > 0) {           // データが届いているなら
+    val = port.read();                  // 読み込んで、変数 val に
+    val = map(val, 0, 255, 0, height);  // 格納値を変換
+  }
+  rect(40, val - 10, 360, 20);
+}
+```
