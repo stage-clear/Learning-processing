@@ -158,4 +158,7 @@ void draw() {
 }
 ```
 
-このほかにもPDF出力のテクニック
+このほかにもPDF出力のテクニックを紹介する多くのサンプルがあります。  
+Fileメニューの「Example」から Library → PDF Export の項を参照してください。
+
+## Arduino へようこそ
