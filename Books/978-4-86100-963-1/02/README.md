@@ -266,3 +266,39 @@ void setup() {
   }
 }
 ```
+
+## 作品をセーブし、パブリッシュし、配信する
+### バージョン管理
+
+`Save As...`
+
+### 静止画を作る
+
+```processing
+saveFrame("screen-####.jpg");
+```
+
+Processing では、ファイルを保存するときに `####` の部分がフレーム番号に置き換えられるので、画像がフレームごとに上書き保存されないようになっています。
+
+```processing
+void keyPressed() {
+  if (keyCode === ENTER) {
+    saveFrame("screen-####.jpg");
+  }
+}
+```
+
+### 代替イメージとして静止画を使う
+
+```processing
+<param name="image" value="loading.gif">
+```
+
+### ビデオを作る
+
+- [Processing Libraries Video](https://processing.org/reference/libraries/video/index.html)
+
+### フレームレートと画面サイズ
+### モバイル装置、iPhone / iPad と Android
+
+- [processing/processing-android](https://github.com/processing/processing-android/wiki)
