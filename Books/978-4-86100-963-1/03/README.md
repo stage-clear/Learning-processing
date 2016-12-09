@@ -56,7 +56,7 @@ for (int x = border; x <= width - border; x += step) {
 
 ```processing
 // 1ステップごとに y の値を変える命令を加える
-iint step = 10;
+int step = 10;
 float lastx = -999;
 float lasty = -999;
 float y = 50;
@@ -122,9 +122,9 @@ for (int x = 20; x <= 480; x += step) {
 
 ```processing
 // サインカーブを作る
-flaot step = 1;
+float step = 1;
 float lastx = -999;
-flaot lasty = -999;
+float lasty = -999;
 float angle = 0;
 float y = 50;
 for (int x = 20; x <= 480; x += step) {
