@@ -151,3 +151,40 @@ y = 50 + (pow(sin(rad), 3) * 30)
 ```processing
 y = 50 + (pow(sin(rad), 3) * noise(rad * 2) * 30)
 ```
+
+### 自分だけのランダム関数
+```proessing
+float customRandom() {
+  float retValue = 1 - pow(random(1), 5);
+  return retValue;
+}
+```
+
+y の位置を計算するときにこの関数を使ってみます
+
+```processing
+void setup() {
+  size(500, 500);
+  
+  float step = 1;
+  float lastx = -999;
+  float lasty = -999;
+  float angle = 0;
+  float y = 50;
+  for (int x = 20; x <= 480; x += step) {
+    flaot rad = radians(angle);
+    y = 20 + (customRandom() * 60);
+    if (lastx > -999) {
+      line(x, y, lastx, lasty);
+    }
+    lastx = x;
+    lasty = y;
+    angle++
+  }
+}
+
+float customRandom() {
+  float retvalue = 1 - pow(random(1), 5);
+  return retValue;
+}
+```
