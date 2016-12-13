@@ -27,6 +27,7 @@ for (int y = 0; y <= height; y += 1) {
 
 ```processing
 // 5.2 関数ブロックに書き直したノイズグリッド
+// さまざまな大きさの正方形で視覚化された、2Dパーリンノイズ
 float xstart, xnoise, ynoise;
 
 void setup() {
@@ -55,6 +56,7 @@ void drawPoint(float x, float y, float noiseFactor) {
 ひとたび関数を定義すれば、さらなる実験のため、この関数を変更していきます。
 
 ```processing
+// 回転を使って視覚化された、2Dパーリンノイズ
 void drawPoint(float x, float y, float noiseFactor) {
   pushMatrix();
   translate(x, y);
@@ -64,3 +66,30 @@ void drawPoint(float x, float y, float noiseFactor) {
   popMatrix();
 }
 ```
+
+setup 関数内の `background(255)` を `background(0)` に変えて、sosite `drawPoint` を書き直せば、
+同じノイズファクターを使って、回転、サイズ、色、アルファを変えることができます
+
+```processing
+void drawPoint(float x, float y, float noiseFactor) {
+  pushMatrix();
+  translate(x, y);
+  rotate(noiseFactor * radians(540));
+    float edgeSize = noiseFactor * 35;
+    float grey = 150 + (noiseFactor * 120);
+    float alph = 150 + (noiseFactor * 120);
+  noStroke();
+    fill(grey, alph);
+    ellipse(0, 0, edgeSize, edgeSize / 2);
+  popMatrix();
+}
+```
+
+> __translate__ を使う
+> あなたが片手にペンを持ち、もう一方で1枚の紙を押さえていると想像してください。
+> あなたが、`line(20, 30, 120, 130)` のようなコマンドを使う時、左上の原点 (0, 0) ポイントと相対して
+> ペンがどこからどこまで動くかという座標を特定しているわけです。
+> `translate(20, 30)` を使う時、あなたはペンを操っているのではなく、代わりに紙の方を動かし、ペン先を (20, 30) ポイントにもってきています。
+> (20, 30) ポイントは、描画を始める新しい原点となります。
+
+## ノイズ・アニメーション
