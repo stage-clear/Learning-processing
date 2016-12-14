@@ -1,4 +1,5 @@
-# 円を描く間違った方法
+# 4. 円を描く間違った方法
+<sup>The Wrong Way to Draw a Circle</sup>
 ## 回転するドローイング
 ### 初めて円を描く
 
