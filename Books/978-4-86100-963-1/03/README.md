@@ -1,4 +1,5 @@
-# 線を引く間違った方法
+# 3. 線を引く間違った方法
+<sup>_The Wrong Way to Draw a Line_</sup>
 ## デタラメさとそうでもないこと
 
 ```processing
