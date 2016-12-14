@@ -1,4 +1,5 @@
-# Processing: アーティストのためのプログラミング言語
+# 2. Processing: アーティストのためのプログラミング言語
+<sup>_Processing: A Programming Language for Artist_</sup>
 
 ## プログラムでお絵描き
 ### 関数、パラメータ、色値
