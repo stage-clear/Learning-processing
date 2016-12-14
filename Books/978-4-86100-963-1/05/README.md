@@ -93,3 +93,251 @@ void drawPoint(float x, float y, float noiseFactor) {
 > (20, 30) ポイントは、描画を始める新しい原点となります。
 
 ## ノイズ・アニメーション
+```processing
+// 5.3 ノイズグリッドふたたび。フレームループ上で描く
+float xstart; // <-
+float xnoise;
+float ystart; // <-
+float ynoise;
+
+void setup() {
+  size(300, 300);
+  
+  smooth();
+  background(0);
+  frameRate(24); // <- フレームレートを設定
+  
+  xstart = random(10); // <-
+  ystart = random(10); // <-
+}
+
+void draw() {
+  background(0); // <- 全てのフレームでバックグラウンドをクリア
+  
+  xstart += 0.01; // <- x/y のノイズのスタート値を増やす
+  ystart += 0.01;
+  
+  xnoise = xstart; // <-
+  ynoise = ystart;
+  
+  for (int y = 0; y <= height; y += 5) {
+    ynoise += 0.1;
+    xnoise = xstart;
+    for (int x = 0; x <= width; x += 5) {
+      xnoise += 0.1;
+      drawPoint(x, y, noise(xnoise, ynoise));
+    }
+  }
+}
+
+void drawPoint(float x, float y, float noiseFactor) {
+  pushMatrix();
+  translate(x, y);
+  rotate(noiseFactor * radians(540));
+  noStroke();
+  float edgeSize = noiseFactor * 25;
+  float grey = 150 + (noiseFactor * 120);
+  float alph = 150 + (noiseFactor * 120);
+  fill(grey, alph);
+  ellipse(0, 0, edgeSize, edgeSize / 2);
+  popMatrix();
+}
+```
+
+```processing
+// 5.4 動きにノイズが加わったノイズグリッド
+float xstart;
+float xnoise;
+float ystart;
+float ynoise;
+float xstartNoise; // <-
+float ystartNoise; // <-
+
+void setup() {
+  size(300, 300);
+  smooth();
+  background(255);
+  frameRate(24);
+  
+  xstartNoise = random(20);
+  ystartNoise = random(20);
+  xstart = random(10);
+  ystart = random(10);
+}
+
+void draw() {
+  background(255);
+  
+  xstartNoise += 0.01;
+  ystartNoise += 0.01;
+  xstart += (noise(xstartNoise) * 0.5) - 0.25;
+  ystart += (noise(ystartNoise) * 0.5) - 0.25;
+  
+  xnoise = xstart;
+  ynoise = ystart;
+  
+  for (int y = 0; y <= height; y += 5) {
+    ynoise += 0.1;
+    xnoise = xstart;
+    for (int x = 0; x <= width; x += 5) {
+      xnoise += 0.1;
+      drawPoint(x, y, noise(xnoise, ynoise));
+    }
+  }
+}
+
+void drawPoint(float x, float y, float noiseFactor) {
+  pushMatrix();
+  translate(x, y);
+  rotate(noiseFactor * radians(360));
+  stroke(0, 150);
+  line(0, 0, 20, 0);
+  popMatrix();
+}
+```
+
+## 3次元
+```processing
+size(幅, 高さ, MODE);
+```
+
+- JAVA2D デフォルト最高品質の2Dレンダラー
+- P2D(Processing2D) - より速い2Dレンダラー
+- P3D(Processing3D) - 高速な3Dレンダラー。速度とファイルサイズを質よりも優先します
+- OPENGL - より良い高速3Dレンダラー
+- PDF - スクリーンでなく、直接PDFファイルに書き込むレンダラー
+
+### 3次元空間で描く
+```processing
+import processing.opengl.*;
+
+void setup() {
+  size(500, 300, OPENGL);
+  sphereDetail(40);
+}
+
+void draw() {
+  background(255);
+  
+  translate(width / 2, height / 2, 0);
+  sphere(100);
+}
+```
+
+### 3次元ノイズ
+```processing
+// 5.5 3Dの遠近法による2Dノイズ
+import processing.opengl.*;
+
+float xstart;
+float xnoise;
+float ystart;
+float ynoise;
+
+void setup() {
+  size(500, 300, OPENGL); // <-
+  background(0);
+  sphereDetail(8);
+  noStroke();
+  
+  xstart = random(10);
+  ystart = random(10);
+}
+
+void draw() {
+  background(0);
+  
+  xstart += 0.01;
+  ystart += 0.01;
+  
+  xnoise = xstart;
+  ynoise = ystart;
+  
+  for (int y = 0; y <= height; y += 5) {
+    ynoise += 0.1;
+    xnoise = xstart;
+    for (int x = 0; x <= width; x += 5) {
+      xnoise += 0.1;
+      drawPoint(x, y, noise(xnoise, ynoise));
+    }
+  }
+}
+
+void drawPoint(float x, float y, float noiseFactor) {
+  pushMatrix();
+  translate(x, 250 - y, -y);
+  float sphereSize = noiseFactor * 35;
+  float grey = 150 + (noiseFactor * 120);
+  float alph = 150 + (noiseFactor * 120);
+  fill(grey, alph);
+  sphere(sphereSize);
+  popMatrix();
+}
+```
+
+```processing
+// 5.6 3次元ノイズの立方体を作る
+float xstart;
+float ystart;
+float zstart;
+
+float xnoise;
+float ynoise;
+float znoise;
+
+int sideLength = 200;
+int spacing = 5;
+
+void setup() {
+  size(500, 300, P3D); // <- レンダラーを P3D に変える
+  background(0);
+  noStroke();
+  
+  xstart = random(10);
+  ystart = random(10);
+  zstart = random(10);
+}
+
+void draw() {
+  background(0);
+  
+  xstart += 0.01;
+  ystart += 0.01;
+  zstart += 0.01;
+  
+  xnoise = xstart;
+  ynoise = ystart;
+  znoise = zstart;
+  
+  translate(150, 20, -150);
+  rotateZ(frameCount * 0.1);
+  rotateY(frameCount * 0.1);
+  
+  for (int z = 0; z <= sideLength; z += spacing) {
+    znoise += 0.1;
+    ynoise = ystart;
+    for (int y = 0; y <= sideLength; y += spacing) {
+      ynoise += 0.1;
+      xnoise = xstart;
+      for (int x = 0; x <= sideLength; x += spacing) {
+        xnoise += 0.1;
+        drawPoint(x, y, z, noise(xnoise, ynoise, znoise));
+      }
+    }
+  }
+}
+
+void drawPoint(float x, float y, float z, float noiseFactor) {
+  pushMatrix();
+  translate(x, y, z);
+  float grey = noiseFactor * 255;
+  fill(grey, 10);
+  box(spacing, spacing, spacing);
+  popMatrix();
+}
+```
+
+- [Haunted Fistank](http://abandonedart.org/?p=449) このセクションで開発したシステムとよく似ています
+
+### 球を描く間違った方法
+}
