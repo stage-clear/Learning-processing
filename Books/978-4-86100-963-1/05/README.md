@@ -340,4 +340,57 @@ void drawPoint(float x, float y, float z, float noiseFactor) {
 - [Haunted Fistank](http://abandonedart.org/?p=449) このセクションで開発したシステムとよく似ています
 
 ### 球を描く間違った方法
+以下は、球の表面上に点を描くという、あまり魔法っぽくない公式です
+```processing
+x = centerX + (radius * cos(s) * sin(t));
+y = centerY + (radius * sin(s) * siin(t));
+z = centerZ + (radius * cos(t));
+```
+
+```processing
+// 5.7 球のまわりのらせん
+import processing.opengl.*;
+
+int radius = 100;
+
+void setup() {
+  size(500, 300, OPENGL);
+  background(255);
+  stroke(0);
 }
+
+void draw() {
+  background(255);
+  
+  translate(width / 2, height / 2, 0);
+  rotateY(frameCount * 0.03);
+  rotateX(frameCount * 0.04);
+  
+  float s = 0;
+  float t = 0;
+  flaot lastx = 0;
+  float lasty = 0;
+  float lastz = 0;
+  
+  while(t < 180) {
+    s += 18;
+    t += 1;
+    float radianS = radians(s);
+    float radianT = radians(t); // <- 三角関数に角度をラジアンに変換
+    
+    float thisx = 0 + (radius * cos(radianS) * sin(radianT));
+    float thisy = 0 + (radius * sin(radianS) * sin(radianT));
+    float thisz = 0 + (radius * cos(radianT));
+    
+    if (lastx != 0) {
+      line(thisx, thisy, thisz, lastx, lasty, lastz);
+    }
+    
+    lastx = thisx;
+    lasty = thisy;
+    lastz = thisz;
+  }
+}
+```
+
+## まとめ
