@@ -1,1 +1,2 @@
-# 創発 _Emergence_
+# 創発
+<sup>_Emergence_</sup>
