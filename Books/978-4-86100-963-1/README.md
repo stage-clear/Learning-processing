@@ -5,9 +5,9 @@
 3. [線を引く間違った方法](03/README.md)
 4. [円を描く間違った方法](04/README.md)
 5. [次元を加える](05/README.md)
-6. 創発
-7. 自律性
-8. フラクタル
+6. [創発](06/README.md)
+7. [自律性](07/README.md)
+8. [フラクタル](08/README.md)
 
 ## Links
 - [ジェネラティブ・アート](https://www.amazon.co.jp/dp/4861009634) - Amazon
