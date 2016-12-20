@@ -228,3 +228,21 @@ class Circle {
 > `numberArray = (int[])append(numberArray, 6);`  
 
 ### ローカルな知識（衝突判定）
+
+```processing
+x += xmove;
+y += ymove;
+if (x > (width + radius)) { x = 0 - radius; }
+if (x < (0 - radius)) { x = width + radius; }
+if (y > (height + radius)) { y = 0 - radius; }
+if (y < (0 - radius)) { y = height + radius; }
+
+boolean touching = false;
+for (int i = 0; i < _circleArr; i++) {
+  Circle otherCirc = _circleArr[i];
+  if () {
+  
+  }
+}
+
+```
