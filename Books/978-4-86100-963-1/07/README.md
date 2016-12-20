@@ -120,3 +120,214 @@ class Cell {
   }
 }
 ```
+
+> __多次元配列__  
+> 1次元の配列  
+> `int[] numberArray = { 1, 2, 3 };`  
+> 2D配列  
+> `int[][] twoDimArray = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };`  
+> さらに多くの次元を持たせることもできます
+> `int[][][] threeDimArray;`  
+> `int[][][][] fourDimArray;`  
+
+### ゲーム・オブ・ライフ
+
+GOL の規則は次の通りです。
+
+1. 生きている（黒い）セルは、2つか3つの隣接するセルが生きていればそのまま生き続ける。さもなければ、過疎か過密のどちらかで死んでしまう
+2. 死んだセルの周囲に、ちょうど3つの生きた隣接するセルがあれば奇跡が起こり、それは生き返る
+
+- [Game of Life | Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+
+```processing
+// 7.2 GOLルールを使って次のステップの状態を計算する
+class Cell {
+  //...
+  //...
+
+  void calcNextState() {
+    int liveCount = 0;
+    for (int i = 0; i < neighbours.length; i++) {
+      if (neighbours[i].state == true) {
+        liveCount++;
+      }
+    }
+
+    if (state == true) {
+      if ((liveCount == 2) || (liveCount == 3)) {
+        nextState = true;
+      } else {
+        nextState = false;
+      }
+    } else {
+      if (liveCount == 3) {
+        nextState = true;
+      } else {
+        nextState = false;
+      }
+    }
+  }
+}
+```
+
+### ヴィシュニアク・ヴォート
+> ヴィシュニアク・ヴォートは、服従に対する教訓です。  
+> それぞれのセルは集団から圧力を受けやすく、隣接セルの傾向に流されます。
+> セルの色が多数派であればそれは変化しません。少数派なら変化します。
+
+```processing
+// 7.3 ヴシュニアク・ヴォート・ルール
+class Cell {
+  // ...
+  // ...
+  
+  void calcNextState() {
+    int liveCount = 0;
+    if (state) { liveCount++; } // <- 自分を含めて隣接セルを数える
+    for (int i = 0; i < neighbours.length; i++) {
+      if (neighbours[i].state == true) {
+        liveCount++;
+      }
+    }
+    
+    if (liveCount <= 4) { // 自分は多数派か?
+      nextState = false;
+    } else if (liveCount > 4) {
+      nextState = true;
+    }
+    
+    if ((liveCount == 4) || (liveCount == 5)) {
+      nextState = !nextState;
+    }
+  }
+}
+```
+
+### ブライアンの脳
+
+ブライアンの脳は3状態のセル・オートマンです。セルにオン/オフだけでなく、もう1つの第三の条件があります。
+ブライアンの脳のCAの状態は「発火」「休息」「オフ」の３種類です。セルは、脳のニューロンのように発火し、再び発火する前に休息します。
+
+- もし状態が発火なら、次の状態は休息
+- もし状態が休息なら、次の状態はオフ
+- もし状態がオフで、2個の隣接セルが今まさに発火していれば、そのセルは発火する
+
+```processing
+// 7.4 ブライアンの脳のために変更されたセルオブジェクト
+class Cell {
+  float x;
+  float y;
+  int state; // <-
+  int nextState; // <-
+  Cell[] neighbours;
+
+  Cell(float ex, float why) {
+    x = ex * _cellSize;
+    y = why * _cellSize;
+    
+    nextState = int(random(2)); // <-
+    state = nextState;
+    neighbours = new Cell[0];
+  }
+  
+  void addNeighbour(Cell cell) {
+    neighbours = (Cell[])append(neighbours, cell);
+  }
+  
+  void calcNextState() {
+    if (state == 0) {
+      int firingCount = 0;
+      for (int i = 0; i < neighbours.length; i++) {
+        if (neighbours[i].state == 1) { // <- 発火している隣接セルを数える
+          firingCount++;
+        }
+      }
+      if (firingCount == 2) { // <- もし2個のセルが発火していたら発火
+        nextState = 1;
+      } else {
+        nextState = state; // <- それ以外の場合は変化しない
+      }
+    } else if (state == 1) { // <- 発火したなら休息
+      nextState = 2;
+    } else if (state == 2) { // <- 休息したならオフ
+      nextState = 0;
+    }
+  }
+  
+  void drawMe() {
+    state = nextState;
+    stroke(0);
+    if (state == 1) {
+      fill(0); // <- 発火 = 黒
+    } else if (state == 2) { 
+      fill(150); // <- 休息 = グレー
+    } else {
+      fill(255); // <- オフ = しろ
+    }
+    ellipse(x, y, _cellSize, _cellSize);
+  }
+}
+```
+
+### 波（平均化）
+
+周囲の影響で混沌が静まっていく標準的な物理モデルの「平均化」を基本にしています。
+
+- もし隣接するセルの状態の平均が255であれば状態は0に
+- もし隣接するセルの状態の返金が0であるなら状態は255に
+- そうでなければ、新しい状態 = 現在の状態 + 隣接セルの状態の平均 - 前の状態の値
+- もし新しい状態が255を超えたら255にし、もし新しい状態が０以下ならそれを0とする
+
+```processing
+// 7.5 波のような独自の動き
+class Cell {
+  float x;
+  float y;
+  float state; // <-
+  float nextState; // <-
+  float lastState; // <-
+  Cell[] neighbours;
+  
+  Cell(float ex, float why) {
+    x = ex * _cellSize; 
+    y = why * _cellSize;
+    nextState = ((x / 500) + (y / 300)) * 14;
+    state = nextState;
+    neighbours = new Cell[0];
+  }
+  
+  void addNeighbour(Cell cell) {
+    neighbours = (Cell[])append(neighbours, cell);
+  }
+  
+  void calcNextState() {
+    float total = 0; // <- 隣接セルの返金を計算
+    for (int i = 0; i < neighbours.length; i++) {
+      total += neighbours[i].state;
+    }
+    float average = int(total / 8);
+    
+    if (average == 255) {
+      nextState = 0;
+    } else if (average == 0) {
+      nextState = 255;
+    } else {
+      nextState = state + average;
+      if (lastState > 0) { nextState -= lastState; }
+      if (nextState > 255) { nextState = 255; }
+      else if (nextState < 0) { nextState = 0; }
+    }
+    lastState = state; // 前の状態を保存
+  }
+  
+  void drawMe() {
+    state = nextState;
+    stroke(0);
+    fill(state); // <- 状態の値に応じた色をつける
+    ellipse(x, y, _cellSize, _cellSize);
+  }
+}
+```
+
+## シミュレーションとビジュアライゼーション
+### ソフトウェア・エージント
