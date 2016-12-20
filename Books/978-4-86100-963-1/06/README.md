@@ -230,19 +230,112 @@ class Circle {
 ### ローカルな知識（衝突判定）
 
 ```processing
-x += xmove;
-y += ymove;
-if (x > (width + radius)) { x = 0 - radius; }
-if (x < (0 - radius)) { x = width + radius; }
-if (y > (height + radius)) { y = 0 - radius; }
-if (y < (0 - radius)) { y = height + radius; }
+// 6.5 Circle クラスno updateMe メソッド(衝突判定付き)
+class Circle {
+  // ...
+  // ...
 
-boolean touching = false;
-for (int i = 0; i < _circleArr; i++) {
-  Circle otherCirc = _circleArr[i];
-  if () {
-  
+  void updateMe() {
+    x += xmove;
+    y += ymove;
+    if (x > (width + radius)) { x = 0 - radius; }
+    if (x < (0 - radius)) { x = width + radius; }
+    if (y > (height + radius)) { y = 0 - radius; }
+    if (y < (0 - radius)) { y = height + radius; }
+
+    boolean touching = false; // <-
+    for (int i = 0; i < _circleArr.length; i++) {
+      Circle otherCirc = _circleArr[i];
+      if (otherCirc != this) {
+        float dis = dist(x, y, otherCirc.x, otherCirc.y);
+        if ((dis - radius - otherCirc.radius) < 0) {
+          touching = true;
+          break;
+        }
+      }
+    }
+
+    // 衝突判定が true なら、縁がだんだん消えていきます
+    if (touching) {
+      if (alph > 0) { alph--; }
+    } else {
+      if (alph < 255) { alph += 2; }
+    }
+
+    drawMe();
   }
 }
-
 ```
+
+### インタラクション・パターン
+
+> 2つの点の中心点を計算するときには、少し慎重にならなくてはなりません。
+
+```processing
+// 交差している円の座標よりも大きいならば、中間点のxは
+x + (otherCirc.x - x) / 2
+
+// 現在の円のx座標が交差している円のx座標よりも小さければ
+otherCirc.x + (x - otherCirc.x) / 2
+```
+> たった1行のコードでどちらの可能性もカバーできるもっといい方法があります。
+
+```processing
+// 2つの円の平均値はそれらの2つの間に中間点をとるので
+(x + otherCirc.x) / 2
+```
+
+```processing
+// 6.6 Circle クラスの updateMe メソッドで円を描く
+class Circle {
+  //...
+  //...
+  
+  void updateMe() {
+    x += xmove;
+    y += ymove;
+    if (x > (width + radius)) { x = 0 - radius; }
+    if (x < (0 - radius)) { x = width + radius; }
+    if (y > (height + radius)) { y = 0 - radius; }
+    if (y < (0 - radius)) { y = height + radius; }
+    
+    for (int i = 0; i < _circleArr.length; i++) {
+      Circle otherCirc = _circleArr[i];
+      if (otherCirc != this) {
+        float dis = dist(x, y, otherCirc.x, otherCirc.y);
+        float overlap = dis - radius - otherCirc.radius; // <- 重なった部分を計算する
+        if (overlap < 0) { // <- 重なりがマイナス = 接触
+          float midx;
+          float midy;
+          midx = (x + otherCirc.x) / 2; // <- 中間点を計算
+          midy = (y + otherCirc.y) / 2; // 
+          stroke(0, 100);
+          noFill();
+          overlap *= -1;
+          ellipse(midx, midy, overlap, overlap);
+        }
+      }
+    }
+
+    drawMe();
+  }
+}
+```
+
+> さらに、マウスプレス関数に現在の円の数を表示させる1行を加えることで、今いくつの円が作られてか知ることができます
+
+```processing
+void mouseReleased() {
+  drawCircle();
+  println(_circleArr.length);
+}
+```
+
+> いくつかのアイデアを紹介します。
+- 痕跡を残す --- フレームごとのスクリーンをクリアしない。その代わり透明な長方形をその上に描く
+- アルファ値と線の太さを減らす --- 線をもっと曖昧な感じにして、くっきりした境界を有機的にぼやけさせる
+- もっと複雑な経路にする --- 2つの点を直線で結ぶよりも、ずっと面白いルートがあることを前章で見ていきました。例えばカーブに沿って動きを作って見たらどうでしょう。
+- もっと面白い形を描く --- 単純な円よりも、何かもっとドキドキするようなものを描く。イメージを読み込んで、オブジェクトの視覚表現に使用することも可能です。
+
+## まとめ
+
