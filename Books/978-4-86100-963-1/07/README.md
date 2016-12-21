@@ -330,4 +330,73 @@ class Cell {
 ```
 
 ## シミュレーションとビジュアライゼーション
+この章のコーディング部分は終わりです。しかし、このアプローチをさまざまな方向に発展させていける余地がたくさんあります。
+この章の残りのページを利用して、そのうちのいくつかの考えを紹介しましょう。
+
 ### ソフトウェア・エージント
+
+```processing
+// 例) 単純なオブジェクトの属性とメソッド
+class Agent {
+  String political_learning = 'right';
+  int num_years_in_education = 12;
+  int salary = 30000;
+  Agent[] neighbors;
+  Agent[] coworkers;
+  Agent[] friends;
+  
+  Agent() {
+    num_years_in_education = 11 + int(random(8));
+    if (num_years_in_eduction < 13) {
+      if (random(1 > 0.8)) {
+        political_learning = 'right';
+      } else {
+        political_learning = 'left';
+      }
+    } else {
+      if (random(1) > 0.3) {
+        political_learning = 'right';
+      } else {
+        political_learning = 'left';
+      }
+    }
+  }
+}
+```
+
+あなたはエージェントの考えや感情を聞き出すことができます。それはおそらくこんな感じになるはずです[
+```processing
+// 
+class Agent {
+  // ...
+  // ...
+  
+  boolean isHappy() {
+    if (political_learning == 'right') {
+      if (salary > 60000) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      if (friends.length > 25) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+}
+```
+
+- [THE COLOUR ECONOMY: THE GAP BETWEEN THE RICH AND THE POOR](http://blog.blprnt.com/blog/blprnt/the-colour-economy-the-gap-between-the-rich-and-the-poor)
+
+### 人間エージェント
+> 重要な基準の1つは、システムが自律していて、外部からの操作がなく、導き手から自由であること。
+
+> もし人間エージェントが、自分たちの行動がシステムに与える影響に気づかないか、あるいは無関心であれば、他の自律したオブジェクトと同様に、有効なデータベースになりえます。
+
+- [http://seb.ly/](http://seb.ly/)
+
+## まとめ
