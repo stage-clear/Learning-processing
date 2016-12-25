@@ -148,3 +148,84 @@ void draw() {
   _trunk.drawMe();
 }
 ```
+
+次に描画スタイル、線の太さ、回転を操作するために、いくつかの新しい属性を `Branch` クラスに加えます。
+これらの属性を初期化しなければなりません。
+
+```processing
+class Branch {
+  // ...
+  // ...
+  float strokeW;
+  float alph;
+  float len;
+  float lenChange;
+  float rot;
+  float rotChange;
+
+  Branch() {
+    // ...
+    // ...
+    strokeW = (1 / level) * 100;
+    alph = 255 / level;
+    len = (1 / level) * random(200);
+    rot = random(360);
+    lenChange = random(10) - 5;
+    rotChange = random(10) - 5;
+    
+    updateMe() {
+      // ...
+    }
+  }
+}
+```
+
+この新しい属性を用いて、`updateMe` 関数が毎フレームごとに呼ばれるたびに、実際に何かをさせることができます。
+
+```processing
+void updateMe(float ex, float why) {
+  x = ex;
+  y = why;
+  
+  rot += rotChange; // <- 回転を増やす
+  if (rot > 360) {
+    rot = 0;
+  } else 
+  if (rot < 0) {
+    rot = 360;
+  }
+  
+  len -= lenChange; // <- 長さを増やす
+  if (len < 0) {
+    lenChange *= -1;
+  } else
+  if (len > 200) {
+    lenChange *= -1;
+  }
+  
+  float radian = radians(rot);
+  endx = x + (len * cos(radian));
+  endy = y + (len * sin(radian));
+  
+  for (int i = 0; i < children.length; i++) {
+    children[i].updateMe(endx, endy);
+  }
+}
+```
+
+あなたが定義、初期化した `strokeW` と `alph` 属性を使うように、オブジェクトの `drawMe` 関数をアップデートします。
+
+```processing
+void drawMe() {
+  strokeWeight(strokeW);
+  stroke(0, alph);
+  fill(255, alph);
+  line(x, y, endx, endy);
+  ellipse(endx, endy, len / 12, len / 12);
+  for (int i = 0; i < children.length; i++) {
+    children[i].drawMe();
+  }
+}
+```
+
+## 指数的成長
