@@ -357,5 +357,148 @@ class Branch {
 
 ```processing
 // 8.4 回転を使って五角形を描く
+FractalRoot pentagon;
+int _maxlevels = 5;
 
+void setup() {
+  size(1000, 1000);
+  smooth();
+  pentagon = new FractalRoot(); // ルートの五角形を作る
+  pentagon.drawShape(); // そこに drawShape メソッドを呼ぶ
+}
+
+class PointObj { // x, y の位置を格納するオブジェクト・クラス
+  float x;
+  float y;
+  PointObj(float ex, float why) {
+    x = ex;
+    y = why;
+  }
+}
+
+class FractalRoot {
+  PointObj[] pointArr = new PointObj[5];
+  Branch rootBranch;
+  
+  FractalRoot() {
+    float centX = width / 2;
+    float centY = height / 2;
+    int count = 0;
+    for (int i = 0; i < 360; i += 72) {
+      float x = centX + (400 * cos(radians(i)));
+      float y = centY + (400 * sin(radians(i)));
+      pointArr[count] = new PointObj(x, y);
+      count++;
+    }
+    rootBranch = new Branch(0, 0, pointArr);
+  }
+  
+  void drawShape() {
+    rootBranch.drawMe();
+  }
+}
+
+class Branch {
+  int level;
+  int num;
+  PointObj[] outerPoints = {};
+  
+  Branch(int lev, int n, PointObj[] points) {
+    level = lev;
+    num = n;
+    outerPoints = points;
+  }
+  
+  void drawMe() {
+    strokeWeight(5 - level);
+    // draw outer shape
+    for (int i = 0; i < outerPoints.length; i++) {
+      int nexti = i + 1;
+      if (nexti == outerPoints.length) {
+        nexti = 0;
+      }
+      line(
+        outerPoints[i].x, outerPoints[i].y, 
+        outerPoints[nexti].x, outerPoints[nexti].y
+      );
+    }
+  }
+}
+```
+
+```processing
+// 8.5 頂点（辺）の中点を計算する関数
+class Branch {
+  // ...
+  // ...
+
+  PointObj[] calcMidPoints() {
+    PointObj[] mpArray = new PointObj[outerPoints.length];
+    for (int i = 0; i < outerPoints.length; i++) {
+      int nexti = i + 1;
+      if (nexti == outerPoints.length) {
+        nexti = 0;
+      }
+      PointObj thisMP = calcMidPoint(outerPoints[i], outerPoints[nexti]);
+      mpArray[i] = thisMP;
+    }
+    return mpArray;
+  }
+
+  PointObj calcMidPoint(PointObj end1, PointObj end2) {
+    float mx;
+    float my;
+    if (end1.x > end2.x) {
+      mx = end2.x + ((end1.x - end2.x) / 2);
+    } else {
+      mx = end1.x + ((end2.x - end1.x) / 2);
+    }
+
+    if (end1.y > end2.y) {
+      my = end2.y + ((end1.y - end2.y) / 2);
+    } else {
+      my = end1.y + ((end2.y - end1.y) / 2);
+    }
+    return new PointObj(mx, my);
+  }
+}
+```
+
+最初の `calcMidPoint` 関数は、外周の点の中点を求めて、2番目の `calcMidPoint` 関数にその値を渡します。
+`calcMidPoint` 関数は、あらゆる位置の組み合わせに対して中点を求めます。
+そして最後に `calcMidPoints` 関数が、それぞれの結果を配列に集めて返します。
+
+`Branch` コンストラクタの中から新しい関数を呼び出して、そして `midPoints` という名前の配列にその結果を入れます。
+
+```processing
+class Branch {
+  // ...
+  // ...
+  PointObj [] midPoints = {}; // <-
+  
+  Branch(int lev, int n, PointObj[] points) {
+    // ...
+    // ...
+    midPoints = calcMidPoints(); // <-
+  }
+}
+```
+
+次に、`drawMe` 関数の中のそれらの点を図上にプロットします。
+
+```processing
+class Branch {
+  // ...
+  // ...
+  void drawMe() {
+    // ...
+    // ...
+ 
+    strokeWeight(0.5);
+    fill(255, 150);
+    for (int j = 0; j < midPoints.length; j++) {
+      ellipse(midPoints[j].x, midPoints[j].y, 15, 15);
+    }
+  }
+}
 ```
