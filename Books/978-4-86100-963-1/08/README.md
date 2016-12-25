@@ -502,3 +502,175 @@ class Branch {
   }
 }
 ```
+
+次に必要になる点の集合は、中点から延ばす支柱の終端です。辺の頂点の角度を扱う必要はありません。
+その代わりに、辺と向かい合った頂点を使うことができます。
+
+最初に、支柱を押し出す長さを全体の長さの比から決めるために、グローバルな `_strutFactor` 変数を定義します。
+
+```processing
+float _strutFactor = 0.2;
+```
+
+`Branch` オブジェクトに、点を追加して描く関数を加えます。
+
+```processing
+// 8.6 辺の中点を向かい合った頂点に向かって延ばす関数
+class Branch {
+
+  PointObj[] calcStrutPoints() {
+    PointObj[] strutArray = new PointObj[midPoints.length];
+    for (int i = 0; i < midPoints.length; i++) {
+      int nexti = i + 3;
+      if (nexti >= midPoints.length) {
+        nexti -= midPoints.length;
+      }
+      PointObj thisSP = calcProjPoint(midPoints[i], outerPoints[nexti]);
+      strutArray[i] = thisSP;
+    }
+    return strutArray;
+  }
+  
+  PointObj calcProjPoint(PointObj mp, PointObj op) {
+    float px;
+    float py;
+
+    // 三角形の計算
+    float adj; 
+    float opp;
+    if (op.x > mp.x) {
+      opp = op.x - mp.x;
+    } else {
+      opp = mp.x - op.x;
+    }
+    if (op.y > mp.y) {
+      adj = op.y - mp.y;
+    } else {
+      adj = mp.y - op.y;
+    }
+    
+    // 斜辺に沿って伸ばす
+    if (op.x > mp.x) {
+      px = mp.x + (opp * _strutFactor);
+    } else {
+      px = mp.x - (opp * _strutFactor);
+    }
+    if (op.y > mp.y) {
+      py = mp.y + (adj * _strutFactor);
+    } else {
+      py = mp.y - (adj * _strutFactor);
+    }
+
+    return new PointObj(px, py);
+  }
+}
+```
+
+さらに、`Branch` コンストラクタにこのコードを加えます。
+
+```processing
+class Branch {
+  // ...
+  // ...
+  PointObj[] projPoints = {}; // <-
+  
+  Branch() {
+    // ...
+    // ...
+    
+    projPoints = calcStrutPoints(); // <-
+  }
+}
+```
+
+### 探求
+`drowMe` 関数で、これらの点を図の中に描いて、正しいかどうかをみてみましょう。
+
+```processing
+class Branch {
+  //...
+  //...
+  
+  void drawMe() {
+    //...
+    //...
+
+    strokeWeight(0.5);
+    fill(255, 150);
+    for (int j = 0; j < midPoints.length; j++) {
+      ellipse(midPoints[j].x, midPoints[j].y, 15, 15);
+      line( // <-
+        midPoints[j].x, midPoints[j].y,
+        projPoints[j].x, projPoints[j].y
+      );
+      ellipse(projPoints[j].x, projPoints[j].y, 15, 15); // <-
+    }
+  }
+}
+```
+
+これで、再帰構造のために必要なすべての点を描くことができるようになりました。
+5本の支柱の端点を内側の五角形の頂点とすることで、これを試してみることができます。
+`Branch` オブジェクトのコンストラクタに以下のコードを加えてください。
+
+```processing
+class Branch {
+  Branch[] myBranches = {};
+
+  Branch(int lev, int n, Point[] points) {
+    //...
+    if ((level + 1) < _maxLevels) {
+      Branch childBranch = new Branch(level + 1, 0, projPoints);
+      myBranches = (Branch[])append(myBranches, childBranch);
+    }
+  }
+}
+```
+
+さらに、子の五角形が画面に表示されるように、`drawMe` 関数に同様のコードを加えてください。
+
+```processing
+class Branch {
+  //...
+
+  void drawMe() {
+    //...
+    for (int k = 0; k < myBranches.length; k++) {
+      myBranches[k].drawMe();
+    }
+  }
+}
+```
+
+完全なサトクリフ五角形フラクタルを作成するためには、他の5つの五角形の内側にも、同様に五角形を描かなければなりません。
+そのためには、さらに5つの新しい `Branch` オブジェクトに点を渡せばいいだけです。
+
+```processing
+class Branch {
+  //...
+
+  Branch(int lev, int n, PointObj[] points) {
+    //...
+
+    if ((level + 1) < _maxlevels) {
+      //...
+      
+      for (int k = 0; k < outerPoints.length; k++) {
+        int nextk = k - 1;
+        if (nextk < 0) {
+          nextk += outerPoints.length;
+        }
+        PointObj[] newPoints = {
+          projPoints[k], 
+          midPoints[k], 
+          outerPoints[k],
+          midPoints[nextk],
+          projPoints[nextk]
+        };
+        childBranch = new Branch(level + 1, k + 1, newPoints);
+        myBranches = (Branch[])append(myBranches, childBranch);
+      }
+    }
+  }
+}
+```
