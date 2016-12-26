@@ -1,8 +1,8 @@
 # Nature of Code
 ## Table of Content
 
-- PREFACE _序文_
-- INTRODUCTION _はじめに_
+PREFACE _序文_  
+INTRODUCTION _はじめに_  
 
 1. VECTORS _ベクトル_
 2. FORCES _力_
