@@ -3,6 +3,7 @@
 ## Book list
 - [Processing をはじめよう](Books/978-4-87311-773-7/)
 - [ジェネラティブ・アート](Books/978-4-86100-963-1/)
+- [Nature of Code](Books/978-4-86246-245-9/)
 
 ## Links
 - [Processing.org](https://processing.org/)
