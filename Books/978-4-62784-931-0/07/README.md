@@ -282,11 +282,11 @@ class Ball {
 ## 衝突するボール
 
 ```processing
-int numBalls;
+int numBalls;             // ボールの数を数える
 Ball[] balls = new Ball[1000];
-float spring = 100;
-float reduction = 0.99;
-float gravity = 0.1;
+float spring = 100;       // 反発係数
+float reduction = 0.99;   // 減衰係数
+float gravity = 0.1;      // 重力加速度
 
 void setup() {
   size(480, 360);
@@ -327,15 +327,15 @@ class Ball {
   }
   
   void move() {
-    speedx *= reduction;
-    speedy *= reduction;
-    posx += speedx;
+    speedx *= reduction;  // 空気抵抗などの影響
+    speedy *= reduction;  // 空気抵抗などの影響
+    posx += speedx;
     posy += speedy;
-    speedy += gravity;
-  }
+    speedy += gravity;    // 重力加速度
+  }
   
-  void bound() {
-    if (posx + radi >= width) {
+  void bound() { // 壁に衝突したときの処理
+    if (posx + radi >= width) {
       speedx = -speedx;
       posx = width - radi;
     }
@@ -356,17 +356,17 @@ class Ball {
     }
   }
   
-  void collide() {
-    for (int i = idno + 1; i < numBalls; i++) {
+  void collide() { // ボール相互の衝突による速度の変化
+    for (int i = idno + 1; i < numBalls; i++) {
       float dx = others[i].posx - posx;
       float dy = others[i].posy - posy;
       float distance = sqrt(dx * dx + dy * dy);
       float critical = others[i].radi + radi;
       if (distance < critical) {
-        float force = spring * (critical - distance);
+        float force = spring * (critical - distance); // はね返りの強さ (f = kx)
         float theta = atan2(dy, dx);
-        float ax = -force * cos(theta) / mass;
-        float ay = -force * sin(theta) / mass;
+        float ax = -force * cos(theta) / mass; // (質量 × 加速度 = 力) -f * cosθ / m
+        float ay = -force * sin(theta) / mass; //                     -f * sinθ / m
         speedx += ax;
         speedy += ay;
         ax = force * cos(theta) / others[i].mass;
