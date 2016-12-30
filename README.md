@@ -2,6 +2,7 @@
 
 ## Book list
 - [Processing をはじめよう](Books/978-4-87311-773-7/)
+- [デザイン言語 Processing 入門](Books/978-4-62784-931-0/)
 - [ジェネラティブ・アート](Books/978-4-86100-963-1/)
 - [Nature of Code](Books/978-4-86246-245-9/)
 
