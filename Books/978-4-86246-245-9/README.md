@@ -9,7 +9,7 @@
 - Chapter 4. __PARTICLE SYSTEMS__ _粒子系_
 - Chapter 5. __PHYSICS LIBRARIES__ _物理らいいぶらり_
 - Chapter 6. __AUTONOMOUS AGENTS__ _自律エージェント_
-- Chapter 7. __CELLULAR AUTOMATA__ _セル・オートマン_
+- Chapter 7. __CELLULAR AUTOMATA__ _セル・オートマトン_
 - Chapter 8. __FRACTALS__ _フラクタル_
 - Chapter 9. __THE EVOLUTION OF CODE__ _遺伝と進化_
 - Chapter 10. __NEURAL NETWORKS__ _ニューラルネットワーク_
