@@ -54,7 +54,7 @@ Cube[][] cubes = new Cube[20][10];
 ```processing
 void setup() {
   size(630, 330, P3D);
-  noStrike();
+  noStroke();
   smooth();
   for (int i = 0; i < 20; i++) {
     for (int j = 0; j < 10; j++) {
