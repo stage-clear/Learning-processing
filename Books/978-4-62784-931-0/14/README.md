@@ -184,6 +184,10 @@ void draw() {
 camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
 ```
 
+視点を `mouseX, mouseY, 300` としていますから, マウスを移動すると視点も移動します.
+注目している点は常に `width / 2, height / 2` です. 最後の `0, 1, 0` でカメラの傾きを表します.
+`(0, 1, 0)` で y 方向の成分だけが1ですから, カメラは x-z 平面に直立していることになります.
+
 ```processing
 void draw() {
   background(0);
