@@ -8,7 +8,7 @@ Processing では, たとえば `size(630, 330, P3D)` のように三つ目の�
 ```processing
 class Cube {
   float x, y; // 位置情報
-  flaot a; // x軸まわりの回転角
+  float a; // x軸まわりの回転角
   float b; // y軸まわりの回転角
   float c; // z軸まわりの回転角
   float w; // 回転のスピード
