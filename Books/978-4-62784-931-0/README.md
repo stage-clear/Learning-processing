@@ -15,8 +15,8 @@
 - Lesson 12. [セルオートマトンが作る迷路](12/README.md)
 - Lesson 13. [反応と拡散が作る生物の模様](13/README.md)
 - Lesson 14. [3D グラフィックス](14/README.md)
-- 付録1. 画像を保存する
-- 付録2. 動画を保存する
+- 付録1. [画像を保存する](15/README.md)
+- 付録2. [動画を保存する](16/README.md)
 
 ## リンク
 - [Sample](http://www.morikita.co.jp/soft/84931/)
