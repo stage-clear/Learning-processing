@@ -14,3 +14,7 @@
 - [Exhibition Processing.org](https://processing.org/exhibition/)
 - [Processing.org | Flickr](https://www.flickr.com/groups/processing/)
 - [OpenProcessing](https://www.openprocessing.org/)
+
+## References
+- [http://opencv.blog.jp/processing](http://opencv.blog.jp/processing)
+- [Processing - 拡張現実感](http://nakayasu.com/lecture/category/processing-%E6%8B%A1%E5%BC%B5%E7%8F%BE%E5%AE%9F%E6%84%9F)
