@@ -29,3 +29,5 @@ void keyPressed() {
   }
 }
 ```
+
+詳細は Help メニューの Reference を参照してください.
