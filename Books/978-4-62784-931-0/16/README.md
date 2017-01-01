@@ -71,4 +71,6 @@ void keyPressed() {
     mm.finish(); // Finish the movie if space bar is pressed!
   }
 }
-```[
+```
+
+詳細は Help メニューの Reference から  Libraries へ進んで Video を参照してください.
