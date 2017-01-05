@@ -29,6 +29,6 @@ class Walker {
     position.x = constrain(position.x, 0, width - 1);
     position.y = constrain(position.y, 0, height - 1);
     
-    hitstory.add(position.get());
+    history.add(position.get());
   }
 }
