@@ -75,5 +75,6 @@ void draw() {
 - [RandomWalkTraditional3](./RandomWalkTraditional3/)
 - [RandomWalk](./RandomWalk/) - Draw rectangle on random position
 - [RandomWalkPVector](./RandomWalkPVector/) - Draw rectangle on random position with PVector
+- [RandomWalkTrail](./RandomWalkTrail/) - Draw rectangle and tail line
 - [RandomWalkLevy](./RandomWalkLevy/) - Draw line
 - [RandomWalkerNoise](./RandomWalkerNoise/) - Draw line
