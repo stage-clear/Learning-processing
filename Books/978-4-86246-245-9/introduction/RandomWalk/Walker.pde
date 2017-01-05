@@ -23,6 +23,6 @@ class Walker {
     y += vy;
     
     x = constrain(x, 0, width - 1); // xの値を[0 ~ width-1]の間に収める
-    y = constrain(y, 0, height - ); // yの値を[0 ~ height-1]の間に収める
+    y = constrain(y, 0, height - 1); // yの値を[0 ~ height-1]の間に収める
   }
 }
