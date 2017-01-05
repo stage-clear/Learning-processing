@@ -291,7 +291,7 @@ float montecarlo() {
     }
   }
 }
-```[
+```
 
 ## Examples
 - [RandomWalkTraditional2](./RandomWalkTraditional2/) 
