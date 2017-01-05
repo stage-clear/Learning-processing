@@ -3,7 +3,7 @@
 class Walker {
   int x, y;
 
-  walker() {
+  Walker() {
     x = width / 2;
     y = height / 2;
   }
