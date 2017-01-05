@@ -7,7 +7,7 @@ class Walker {
   ArrayList<PVector> history;
   
   Walker() {
-    position new PVector(width / 2, height / 2);
+    position = new PVector(width / 2, height / 2);
     history = new ArrayList<PVector>();
   }
   
