@@ -13,7 +13,7 @@ class Walker {
     point(x, y);
   }
   
-  void setup() {
+  void step() {
     int stepx = int(random(3)) - 1;
     int stepy = int(random(3)) - 1;
     x += stepx;
