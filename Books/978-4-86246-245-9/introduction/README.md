@@ -198,7 +198,48 @@ __標準偏差__ (ギリシャ文字で σ <sup>シグマ</sup> で表記) の�
 > つまり, 各個人について平均tonosawomotome, それぞれを2乗します(分散).
 > これらの値の平均を求め, その平方根が標準偏差です.
 
-## Example list
+ランダム値の正規分布を Processing スケッチで使用する場合に, これらの計算を自分で行う必要はありません.
+`Random` という名前のクラスを利用すればよいのです. このクラスを利用するためには,
+コード内で `import java.util.Random` と記述して Java ライブラリをインポートします.
+
+- [JavaDocs](http://docs.oracle.com/javase/6/docs/api/java/util/Random.html)
+
+```processing
+import java.util.Random;
+Random generator; // 乱数ジェネレーターのようなものを作成するので, 変数名を generator とする
+
+void setup() {
+  size(640, 360);
+  generator = new Random();
+}
+
+void draw() {
+  float num = (float) generator.nextGaussian(); // <-
+  // ガウスランダム値を要求 
+  // (nextGaussian() は double値を返すため, float値への変換が必要)
+}
+```
+
+`nextGaussian()` 関数は, ランダム値の正規分布を返す際のパラメータとして, __平均値0__ と __標準偏差1__ を使用します.
+例えば平均を320px, 標準偏差を60pxとしましょう.
+
+[Example I.4: ガウス分布](./NOC_I_4_Gaussian/)
+
+```processing
+void draw() {
+  float num = (float) generator.nextGaussian(); // `nextGaussian()` double値を返す
+  float sd = 60;
+  float mean = 320;
+
+  flaot x = sd * num + mean; // 標準偏差を乗算し平均を加算
+
+  noStroke();
+  fill(255, 10);
+  ellipse(x, 180, 16, 16);
+}
+```
+
+## Examples
 - [RandomWalkTraditional2](./RandomWalkTraditional2/) 
 - [RandomWalkTraditional3](./RandomWalkTraditional3/)
 - [RandomWalk](./RandomWalk/) - Draw rectangle on random position
@@ -207,3 +248,4 @@ __標準偏差__ (ギリシャ文字で σ <sup>シグマ</sup> で表記) の�
 - [RandomWalkTrailCurve](./RandomWalkTrailCurve/) - Draw circle and tail line
 - [RandomWalkLevy](./RandomWalkLevy/) - Draw line
 - [RandomWalkerNoise](./RandomWalkerNoise/) - Draw line
+- [Gaussian2](./Gaussian2/)
