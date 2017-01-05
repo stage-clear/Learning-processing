@@ -32,6 +32,8 @@ class Walker {
   }
 }
 
+// モンテカルロ法
+// https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%83%86%E3%82%AB%E3%83%AB%E3%83%AD%E6%B3%95
 float montecarlo() {
   while(true) {
     float r1 = random(1);
