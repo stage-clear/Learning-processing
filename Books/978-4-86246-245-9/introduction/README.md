@@ -71,6 +71,9 @@ void draw() {
 }
 ```
 
+## 確率と非一様分布
+
+## Example list
 - [RandomWalkTraditional2](./RandomWalkTraditional2/) 
 - [RandomWalkTraditional3](./RandomWalkTraditional3/)
 - [RandomWalk](./RandomWalk/) - Draw rectangle on random position
