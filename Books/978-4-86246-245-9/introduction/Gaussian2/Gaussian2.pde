@@ -14,7 +14,7 @@ void draw() {
   float g = randomGaussian();
   float b = randomGaussian();
   
-  flaot sd = 100;
+  float sd = 100;
   float mean = 100;
   
   r = constrain((r * sd) + mean, 0, 255);
