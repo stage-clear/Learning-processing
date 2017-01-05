@@ -15,4 +15,5 @@
 - Chapter 10. __NEURAL NETWORKS__ _ニューラルネットワーク_
 
 ## Links
+- [shiffman/The-Nature-of-Code-Examples](https://github.com/shiffman/The-Nature-of-Code-Examples)
 - [Nature of Code](https://www.amazon.co.jp/dp/4862462456) - Amazon
