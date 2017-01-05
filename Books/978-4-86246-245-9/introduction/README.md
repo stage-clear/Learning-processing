@@ -248,4 +248,4 @@ void draw() {
 - [RandomWalkTrailCurve](./RandomWalkTrailCurve/) - Draw circle and tail line
 - [RandomWalkLevy](./RandomWalkLevy/) - Draw line
 - [RandomWalkerNoise](./RandomWalkerNoise/) - Draw line
-- [Gaussian2](./Gaussian2/)
+- [Gaussian2](./Gaussian2/) - Exercise 1.4
