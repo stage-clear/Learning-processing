@@ -415,11 +415,28 @@ for (int x = 0; x < width; x++) {
 updatePixels();
 ```
 
-`noise()` に準じて各ピクセルに色をつける場合も
+`noise()` に準じて各ピクセルに色をつける場合も, `random()` の代わりに `noise()` を呼び出す以外は全く同じです.
 
 ```processing
 float bright = map(noise(x, y), 0, 1, 0, 255); // パーリンノイズの明度
 ```
+
+```processing
+float xoff = 0.0; // xoff = 0 で開始
+
+for (int x = 0; x < width; x++) {
+  float yoff = 0.0; // 各 xoff について yoff = 0 で開始
+
+  for (int y = 0; y < height; y++) {
+    float bright = map(noise(xoff, yoff), 0, 1, 0, 255); // xoff と yoff を noise() に使用
+    pixels[x + y * width] = color(bright); // x と y を使ってピクセル位置を取得
+    yoff += 0.01; // yoff をインクリメント
+  }
+  xoff += 0.01; // xoff をインクリメント
+}
+```
+
+
 
 ## Examples
 - [RandomWalkTraditional2](./RandomWalkTraditional2/) 
@@ -431,3 +448,5 @@ float bright = map(noise(x, y), 0, 1, 0, 255); // パーリンノイズの明度
 - [RandomWalkLevy](./RandomWalkLevy/) - Draw line
 - [RandomWalkerNoise](./RandomWalkerNoise/) - Draw line
 - [Gaussian2](./Gaussian2/) - Exercise 1.4
+- [Noise1D](./Noise1D/)
+- [Noise2D](./Noise2D/)
