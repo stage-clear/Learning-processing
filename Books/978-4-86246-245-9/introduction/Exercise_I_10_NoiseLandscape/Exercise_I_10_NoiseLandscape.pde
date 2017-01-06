@@ -14,7 +14,7 @@ void draw() {
   background(255);
   pushMatrix();
   translate(width / 2, height / 2 + 20, -160);
-  rotate(PI / 3);
+  rotateX(PI / 3);
   rotateZ(theta);
   land.render();
   popMatrix();
