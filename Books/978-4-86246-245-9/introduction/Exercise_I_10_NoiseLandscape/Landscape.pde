@@ -40,7 +40,10 @@ class Landscape {
         translate(x * scl - w / 2, y * scl - h / 2, 0);
         vertex(0, 0, z[x][y]);
         vertex(scl, 0, z[x + 1][y]);
-        vertex(scl, scl, );
+        vertex(scl, scl, z[x + 1][y + 1]);
+        vertex(0, scl, z[x][y + 1]);
+        endShape();
+        popMatrix();
       }
     }
   }
