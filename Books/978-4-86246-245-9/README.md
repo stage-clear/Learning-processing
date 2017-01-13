@@ -7,7 +7,7 @@
 - Chapter 2. [__FORCES__ _力_](02/)
 - Chapter 3. [__OSCILLATION__ _振動_](03/)
 - Chapter 4. [__PARTICLE SYSTEMS__ _粒子系_](04/)
-- Chapter 5. [__PHYSICS LIBRARIES__ _物理らいいぶらり_](05/)
+- Chapter 5. [__PHYSICS LIBRARIES__ _物理ライブラリ_](05/)
 - Chapter 6. [__AUTONOMOUS AGENTS__ _自律エージェント_](06/)
 - Chapter 7. [__CELLULAR AUTOMATA__ _セル・オートマトン_](07/)
 - Chapter 8. [__FRACTALS__ _フラクタル_](08/)
