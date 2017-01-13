@@ -2,21 +2,21 @@
 // Mover.pde
 
 class Mover {
-  PVector positoin;
+  PVector position;
   PVector velocity;
   PVector acceleration;
   float topspeed;
   
   Mover() {
-    positoin = new PVector(width / 2, height / 2);
+    position = new PVector(width / 2, height / 2);
     velocity = new PVector(0, 0);
     acceleration = new PVector(-0.001, 0.01);
     topspeed = 10;
   }
   
   void update() {
-    veloctity.add(acceleration);
-    velocitty.limit(topspeed);
+    velocity.add(acceleration);
+    velocity.limit(topspeed);
     location.add(velocity);
   }
   
