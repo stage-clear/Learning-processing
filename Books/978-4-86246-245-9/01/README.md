@@ -268,3 +268,98 @@ u.div(2);
 
 ## <a id="section-1_5"></a>1.5 ベクトルの大きさ
 
+ピタゴラスの定理は, __a__ の2乗と __b__ の2乗を足すと __c__ の2乗になる, というものです.
+
+```
+‖v→‖ = √vx * vx + vy * vy
+```
+つまり, PVector で次のようになります.
+
+```processing
+float msg() {
+  return sqrt(x * x + y * y);
+}
+```
+
+```processing
+// Example 1.5: ベクトルの大きさ
+
+void setup() {
+  size(640, 360);
+}
+
+void draw() {
+  PVector mouse = new PVector(mouseX, mouseY);
+  PVector center = new PVector(width / 2, height / 2);
+  mouse.sub(center);
+  
+  // ベクトルの大きさ(長さ)を得るには mag() 関数を使う.
+  // ここでは, ウィンドウの上部に描画された長方形の幅として使用.
+  float m = mouse.mag();
+  fill(0);
+  rect(0, 0, m, 10);
+  
+  translate(width / 2, height / 2);
+  line(0, 0, mouse.x, mouse.y);
+}
+```
+
+## <a id="section-1_6"></a> 1.6 ベクトルの正規化
+ベクトルの場合, 長さが1であるものを標準ベクトルと仮定します.
+ベクトルを正規化するには, 任意の長さのベクトルを受け取り, 方向を変えずにその長さを1に変更します.
+このように変換したものを __単位ベクトル__ と呼びます.
+
+任意ベクトル u<sup>→</sup> があるとき, その単位ベクトル(u<sup>^</sup>)は次のように求められます.
+
+u<sup>^</sup> = u<sup>→</sup> ÷ ‖u<sup>→</sup>‖
+
+ベクトルを正規化するときは, 各要素をベクトルで除算します.
+例えばベクトルの長さが5であるとします. 5を5で割ると1になりますね.
+つまり, 正三角形の斜辺を5で割ってこれを縮小する必要があるということです.
+このとき, 隣辺もやはり5で割って縮小されます.
+
+```processing
+void normalize() {
+  float m = mag();
+  div(m);
+}
+```
+
+ベクトルの大きさが0の場合は, どうすればよいでしょうか?
+0で割ることはできません!
+
+```processing
+void normalize() {
+  float m = mag();
+  if (m != 0) {
+    div(m);
+  }
+}
+```
+
+
+```processing
+// Example 1.6: ベクトルの正規化
+
+void draw() {
+  background(255);
+  
+  PVector mouse = new PVector(mouseX, mouseY);
+  PVector center = new PVector(width / 2, height / 2);
+  mouse.sub(center);
+  
+  // この例では, ベクトルを正規化した後, 画面上で見えるように50を掛けている. 
+  // 正規化により, マウスカーソルがどこにある場合でもベクトルの長さは同じ(50)
+  mouse.normalize(); 
+  mouse.mult(50);
+  translate(width / 2, height / 2);
+  line(0, 0, mouse.x, mouse.y);
+}
+```
+
+## <a id="section-1_7"></a> 1.7 ベクトル運動: 速度
+
+
+## <a id="section-1_8"></a> 1.8
+## <a id="section-1_9"></a> 1.9
+## <a id="section-1_10"></a> 1.10
