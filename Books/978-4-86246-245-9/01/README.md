@@ -99,19 +99,23 @@ location = location + velocity;
 ベクトルは一般にボールドで, または上に矢印を付けて表記されています.
 ここでは __スカラー__ と区別するために, __ベクトル__ の表記には矢印を使います.
 
-- ベクトル: u<sup>→</sup>
+- ベクトル: u→
 - スカラー: x
 
 以下の式は
 
-w<sup>→</sup> = u<sup>→</sup> + v<sup>→</sup>  
+```mathematica
+w→ = u→ + v→
+```
 
 次のように書くことができます
 
-w<sub>x</sub> = u<sub>x</sub> + v<sub>x</sub>  
-w<sub>u</sub> = u<sub>y</sub> + v<sub>y</sub>  
+```mathematica
+wx = ux + vx
+wu = uy + vy
 
-w<sup>→</sup> = (x, y)  
+w→ = (x, y)  
+```
 
 ```processing
 // 別の PVector オブジェクトを引数として受け取る add() という関数を作成します
@@ -188,12 +192,16 @@ void draw() {
 
 ### ベクトル減算
 
-w<sup>→</sup> = u<sup>→</sup> - v<sup>→</sup>  
+```mathematica
+w→ = u→ - v→
+```
 
 これは次のように書くことができます.
 
-w<sub>x</sub> = u<sub>x</sub> - v<sub>x</sub>  
-w<sub>y</sub> = u<sub>y</sub> - v<sub>y</sub>
+```mathematica
+wx = ux - vx  
+wy = uy - vy
+```
 
 ```processing
 void sub(PVector v) {
@@ -221,19 +229,23 @@ void draw() {
 
 > __ベクトルの基本的な特性__  
 > ベクトルの加算は, 実数の加算と同じ代数規則に従います.  
-> 交換法則: u<sup>→</sup> + v<sup>→</sup> = v<sup>→</sup> + u<sup>→</sup>  
-> 結合法則: u<sup>→</sup> + (v<sup>→</sup> + w<sup>→</sup>) = (u<sup>→</sup> + v<sup>→</sup>) + w<sup>→</sup>  
+> 交換法則: `u→ + v→ = v→ + u→`  
+> 結合法則: `u→ + (v→ + w→) = (u→ + v→) + w→`  
 
 ### ベクトル乗算
 ベクトルの乗算と言ったとき, 通常はベクトルの __スケーリング__ を意味します.  
 ベクトルに掛けるのは別のベクトルではありません. スカラー値, つまり単一の値であることに注意してください.
 
-w<sup>→</sup> = u<sup>→</sup> * n
+```mathematica
+w→ = u→ * n
+```
 
 これは, 次のように書くことができます.
 
-w<sub>x</sub> = u<sub>x</sub> * n  
-w<sub>y</sub> = u<sub>y</sub> * n  
+```mathematica
+wx = ux * n  
+wy = uy * n  
+```
 
 ```processing
 void mult(float n) {
@@ -262,15 +274,15 @@ u.div(2);
 
 > __ベクトルのその他の特性__  
 > 加算と同じく, ベクトルには基本的な乗算の代数規則が当てはまります.  
-> 結合法則: (n * m) * v→ = n * (m * v→)  
-> 分配法則(2個のスカラーと1個のベクトル): (n * m) * v<sup>→</sup> = n * v<sup>→</sup> + m * v<sup>→</sup>  
-> 分配法則(2個のベクトルと1個のスカラー): (u<sup>→</sup> + v<sup>→</sup>) * n = u<sup>→</sup> * n + v<sup>→</sup> + n  
+> 結合法則: `(n * m) * v→ = n * (m * v→)`  
+> 分配法則(2個のスカラーと1個のベクトル): `(n * m) * v→ = n * v→ + m * v→`  
+> 分配法則(2個のベクトルと1個のスカラー): `(u→ + v→) * n = u→ * n + v→ + n`  
 
 ## <a id="section-1_5"></a>1.5 ベクトルの大きさ
 
 ピタゴラスの定理は, __a__ の2乗と __b__ の2乗を足すと __c__ の2乗になる, というものです.
 
-```
+```mathematica
 ‖v→‖ = √vx * vx + vy * vy
 ```
 つまり, PVector で次のようになります.
@@ -309,9 +321,11 @@ void draw() {
 ベクトルを正規化するには, 任意の長さのベクトルを受け取り, 方向を変えずにその長さを1に変更します.
 このように変換したものを __単位ベクトル__ と呼びます.
 
-任意ベクトル u<sup>→</sup> があるとき, その単位ベクトル(u<sup>^</sup>)は次のように求められます.
+任意ベクトル `u→` があるとき, その単位ベクトル(`u^`)は次のように求められます.
 
-u<sup>^</sup> = u<sup>→</sup> ÷ ‖u<sup>→</sup>‖
+```mathematica
+u^ = u→ ÷ ‖u→‖
+```
 
 ベクトルを正規化するときは, 各要素をベクトルで除算します.
 例えばベクトルの長さが5であるとします. 5を5で割ると1になりますね.
