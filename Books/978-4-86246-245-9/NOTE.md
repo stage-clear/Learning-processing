@@ -9,3 +9,6 @@
 - __ベクトルの正規化__ :
  - ベクトルの長さで, 各辺を割ります
  - `u^ = u→ / ‖u→‖`
+- Motion 101 (運動の基礎)
+ 1. 位置に速度を加算 __Add velocity to location__
+ 1. 位置にオブジェクトを描画 __Draw object at location__
