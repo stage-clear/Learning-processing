@@ -761,4 +761,122 @@ PVector dir = PVector.sub(mouse, location);
 ```
 
 これで Mover の位置からマウスの位置までの PVector が得られました.
-このベクトルを使って実際にオブジェクトを加速:すると, オブジェクトがマウスの:
+このベクトルを使って実際にオブジェクトを加速:すると, オブジェクトがマウスの位置に瞬間移動したように見えます.
+もちろん, これではよいアニメーションになりません. オブジェクトがマウスに向かってどのくらいすばやく加速するかを決める必要があります.
+
+加速度 PVector の大きさを設定するには, その大きさに関わらず, まずその方向ベクトルを __正規化__ しなくてはなりません.
+
+```processing
+float anything = ?????
+dir.normalize();
+dir.mult(anything);
+```
+
+まとめると, 手順は以下のようになります:
+
+- オブジェクトからターゲット位置(マウス)を指すベクトルを計算します.
+- このベクトルを正規化します.
+- このベクトルを適切な値にスケーリングします(特定の値を掛けます)
+- このベクトルを加速度に代入します.
+
+`update()` 関数は以下のようになります.
+
+```processing
+// Example 1.10: マウスに向かう加速度
+
+void update() {
+  PVector mouse = new PVector(mouseX, mluseY);
+  PVector dir = PVector.sub(mouse, location);   // 手順1: 方向を計算
+  
+  dir.normalize();                              // 手順2: 正規化
+  dir.mult(0.5);                                // 手順3: スケーリング
+  
+  velocity.add(acceleration);                   // 手順4: 加速
+  velocity.limit(topspeed);
+  location.add(velocity);
+}
+```
+
+ターゲットに到達しても円が停止しないのはなぜでしょうか?
+このオブジェクトは, 目的地で止まるということを知りません.
+オブジェクトが知っているのは目的地だけであり, なるべく急いでそこに行こうとしているだけなのです.
+あまりにも急いでいるために行き過ぎてしまい, 戻らなくてはなりません.
+戻るときにもなるべく急いで目的地に行こうとするため, また行き過ぎてしまい, という繰り返しです.
+
+この例は重力の概念によく似ています(オブジェクトがマウスの位置に引かれています).
+ただし, ここでは重力の強さ(加速度の大きさ)が距離に反比例するという点, つまりオブジェクトがマウスに近づくにつれて加速度が増すという点が考慮されていません.:
+
+- [ ] Exercise 1.8 近づいたり遠ざかったりするにつれて強くなる可変の大きさに加速度を, 上の例に組み込んでください
+
+ここまでは1つの Mover を使っていましたが, いくつもの Mover を使うとどうなるでしょうか.
+
+```processing
+// Example 1.11: マウスに向かって加速する Mover の一群
+Mover[] movers = new Mover[20]; // オブジェクトの配列
+
+void setup() {
+  size(640, 360);
+  background(255);
+  for (int i = 0; i < movers.length; i++) {
+    movers[i] = new Mover(); // 配列内の各オブジェクトを初期化
+  }
+}
+
+void draw() {
+  background(255);
+  
+  for (int i = 0; i < movers.length; i++) {
+    // 配列内のすべてのオブジェクトに対して関数を呼び出し
+    movers[i].update();
+    movers[i].checkEdge();
+    movers[i].display();
+  }
+}
+
+class Mover {
+  PVector location;
+  PVector velocity;
+  PVector acceleration;
+  float topspeed;
+  
+  Mover() {
+    location = new PVector(random(width), random(height));
+    velocity = new PVector(0, 0);
+    topspeed = 4;
+  }
+  
+  void update() {
+    // 加速度の計算アルゴリズム
+    // マウスを指すベクトルを求める
+    PVector mouse = new PVector(mouseX, mouseY);
+    PVector dir = PVector.sub(mouse, location);
+    dir.normalize();  // 正規化
+    dir.mult(0.5); // スケーリング
+    acceleration = dir; // 加速度に設定
+    
+    velocity.add(acceleration); // Motion 101 速度は加速度によって変化し:
+    velocity.limit(topspeed);   // 位置は速度によって変化する
+    location.add(velocity); 
+  }
+  
+  void display() {
+    stroke(0);
+    fill(175);
+    ellipse(location.x, location.y, 16, 16);
+  }
+  
+  void checkEdge() {
+    if (location.x > width) {
+      location.x = 0;
+    } else if (location.x < 0) {
+      location.x = width;
+    }
+    
+    if (location.y > height) {
+      location.y = 0;
+    } else if (location.y < 0) {
+      location.y = height;
+    }
+  }
+}
+```
