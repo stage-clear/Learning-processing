@@ -701,6 +701,47 @@ PVector.add(v, u);  // <- static    : クラスで呼び出し
 v.add(u);           // <- 非static  : オブジェクトインスタンスでの呼び出し
 ```
 
-Processing で static関数を
+Processing で static関数を作成できないので, 初めて見たという方もいるでしょう.
+static 関数を使うと, 入力したPVector の値を変更することなく, PVector オブジェクトに対して汎用的な算術演算を行うことができます.
+さて, `add()` の static バージョンを作成するとしたら, どのように書けばよいのでしょうか.
 
-## <a id="section-1_10"></a> 1.10
+```processing
+// add の static バージョンでは, 2つのPVector が加算され, 新しい PVector に結果が代入される.
+// 下のPVector (vとu) の値は変わらない
+static PVector add(PVector v1, PVector v2) {
+  PVector v3 = new PVector(v1.x + v2.x, v1.y + v2.y);
+  return v3;
+}
+```
+
+以下のような違いがあります:
+
+- 関数に __static__ のラベルが付いています
+- 関数は void 型の戻り値を持たず, PVector を返します
+- 関数は v1 と v2 の要素を合計し, 新しく作成した PVector(v3) に割り当て, 戻り値とします
+
+```processing
+PVector v = new PVector(0, 0);
+PVector u = new PVector(4, 5);
+PVector w = v.add(u); // <- これは間違い!
+PVector w = PVector.add(v, u);
+```
+
+PVector クラスには `add()` `sub()` `mult()` `div()` の static バージョンが用意されています.
+
+- [ ] Exercise 1.7 以下の疑似コードを static 関数または非 static 関数を使用して完成させましょう:
+ - PVector v は (1,5) に等しい
+ - PVector u は v に 2を掛けたものに等しい
+ - PVector w は v から u を引いたものに等しい
+ - PVector w を 3で割る
+
+```proccesing
+PVector v = new PVector(1, 5);
+PVector u = PVector.mult(v, 2);
+PVector w = PVector.sub(v, u);
+w.div(3);
+```
+
+## <a id="section-1_10"></a> 1.10 加速度の対話的処理
+
+:
