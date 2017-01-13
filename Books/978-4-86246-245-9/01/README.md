@@ -288,7 +288,7 @@ u.div(2);
 つまり, PVector で次のようになります.
 
 ```processing
-float msg() {
+float mag() {
   return sqrt(x * x + y * y);
 }
 ```
@@ -372,8 +372,335 @@ void draw() {
 ```
 
 ## <a id="section-1_7"></a> 1.7 ベクトル運動: 速度
+画面上のオブジェクトには位置<sup>(任意の瞬間にオブジェクトがいる場所)</sup>と速度<sup>(ある瞬間から次の瞬間までに移動する距離)</sup>があります.
+次のように速度を位置に加算します.
 
+```processing
+location.add(velocity);
+```
+そしてオブジェクトをその位置に描画します.
 
-## <a id="section-1_8"></a> 1.8
-## <a id="section-1_9"></a> 1.9
+```processing
+ellipse(location.x, location.y, 16, 16);
+```
+
+これが「Motion 101」（運動の基礎）です:
+1. 位置に速度を加算
+2. 位置にオブジェクトを描画
+
+ここでは, 画面上を動くオブジェクトを記述する汎用的なMoverクラスを作成していきます.
+ここで, 次の2つの疑問について考える必要があります.
+
+1. Mover(移動オブジェクト)が持つデータは何か?
+2. Moverが持つ機能は何か?
+
+Moverオブジェクトは, いずれも `PVector` オブジェクトである `location` と `velocoty` を持ちます.
+
+```processing
+class Mover {
+  PVector location;
+  PVector velocity;
+}
+```
+機能は単純です. Mover は動く必要があり, 表示される必要が有ります.
+
+```processing
+class Mover {
+  // ...
+  void update() {
+    location.add(velocity);
+  }
+  
+  void display() {
+    stroke(0);
+    fill(175);
+    ellipse(location.x, location.y, 16, 16);
+  }
+}
+```
+
+1つ重要なことを忘れいていました. オブジェクトの __コンストラクタ__ です.
+
+```processing
+Mover m = new Mover();
+
+class Mover {
+  Mover() {
+    location = new PVector(random(width), random(height));
+    velocity = new PVector(random(-2, 2), random(-2, 2));
+  }
+}
+```
+
+さて, ウィンドウの端に達したときのオブジェクトの動作を定義する関数を組み込んで, Mover クラスを完成させましょう.
+ここでは, 単純に反対側に回り込ませます.
+
+```processing
+class Mover {
+  // ...
+  void checkEdge() {
+    if (location.x > width) {
+      location.x = 0;
+    } else if (location.x < 0) {
+      location.x = width;
+    }
+    
+    if (location.y > height) {
+      location.y = 0;
+    } else if (location.y < 0) {
+      location.y = height;
+    }
+  }
+}
+```
+
+これで, Moverクラスは完成です.
+
+```processing
+// Example 1.7: Motion 101 (速度)
+
+Mover mover;
+
+void setup() {
+  size(640, 360);
+  mover = new Mover();
+}
+
+void draw() {
+  background(255);
+  
+  mover.update();
+  mover.checkEdge();
+  mover.display();
+}
+
+class Mover {
+  PVector location;
+  PVector velocity;
+
+  Mover() {
+    location = new PVector(random(width), random(height));
+    velocity = new PVector(random(-2, 2), random(-2, 2));
+  }
+  
+  void update() {
+    location.add(velocity);
+  }
+  
+  void display() {
+    stroke(0);
+    fill(175);
+    ellipse(location.x, location.y, 16, 16);
+  }
+  
+  void checkEdge() {
+    if (location.x > width) {
+      location.x = 0;
+    } else if (location.x < 0) {
+      location.x = width;
+    }
+    
+    if (location.y > height) {
+      location.y = 0;
+    } else if (location.y < 0) {
+      location.y = height;
+    }
+  }
+}
+```
+
+## <a id="section-1_8"></a> 1.8 ベクトル運動: 加速度
+現実世界で見られるような動きにするため, Mover クラスに `acceleration` という `PVector` を追加しましょう.
+
+ここで使用する __加速度__ という言葉の厳密な定義は, __速度の変化の割合__ です.
+速度とは, __場所の変化の割合__ でした. ここで作ろうとしているのは, 本質的には「トリクルダウン」の効果です.
+__つまり加速度が速度に作用し, 速度が位置に作用します__ 
+(この考え方は, 力が加速度に作用し, 加速度が速度に作用し, 速度が位置に影響するという効果を見ていくときにさらに重要になります).
+
+```processing
+velocity.add(acceleration);
+location.add(velocity);
+```
+
+練習として, ここからは私たちが使う「公式」を作っていきましょう.
+この後すべてのコード例では, 速度と位置に触れる必要がなくなります(初期化は除きます).
+言い換えると, 「加速度を計算し, トリクルダウンの効果を生み出すためのアルゴリズムを考えること」が, 私たちの運動のプログラミングにおける目下の目標です.
+加速度を計算する方法を考えていきましょう.
+
+### 加速度の各種アルゴリズム
+1. 等加速度
+2. 完全にランダムな加速度
+3. マウスに向かう加速度
+
+加速度(acceleration)のアルゴリズム #1 の __等加速度__ は, 特に面白みはありません.
+
+```processing
+class Mover {
+  PVector location;
+  PVector velocity;
+  PVector acceleration; // <- 加速度で使う新しいPVctor
+}
+```
+
+`update()` 関数に加速度を組み込みます.
+
+```processing
+void update() {
+  velocity.add(acceleration); // 運動アルゴリズムが2行に
+  location.add(velocity);
+}
+```
+
+```processing
+location = new PVector(width / 2, height / 2);
+velocity = new PVector(0, 0);
+acceleration = new PVector(-0.001, 0.01);
+```
+
+速度ベクトルの大きさを妥当な範囲にしておくには, 加速度の値をごく小さいものにする必要があります.
+また, 速度ベクトルの大きさをコントロールするために, PVector の関数 `limit()` 関数も使います.
+
+```processing
+velocity.limit(10); // <- limit() 関数でベクトルの大きさを抑制
+```
+
+このコードはこういう意味です.
+
+> 速度の大きさは? 10よりも小さければ, そのままでOK. でも10より大きければ, 減らして10にするんだ!
+
+- [x] Exercise 1.4 PVector クラスで使う `limit()` 関数を完成させてください
+
+```processing
+void limit(float max) {
+  if (mag() > max) {
+    normalize();
+    mult(max);
+  }
+}
+```
+
+```processing
+// Example 1.8: Motion 101(速度と等加速度)
+class Mover {
+  PVector location;
+  PVector velocity;
+  PVector acceleration; // <- 加速度がミソ!
+  float topspeed; // <- 変数topspeedで速度の大きさを制御
+  
+  Mover() {
+    location = new PVector(width / 2, height / 2);
+    velocity = new PVector(0, 0);
+    acceleration = new PVector(-0.001, 0.001);
+    topspeed = 10;
+  }
+  
+  void update () {
+    velocity.add(acceleration); // 速度は加速度によって変化し, topspeed によって制御される
+    velocity.limit(topspeed); 
+    location.add(velocity);
+  }
+  
+  void display () {}
+  void checkEdge() {}
+}
+```
+
+- [ ] Exercise 1.5 上矢印を押すと加速し, 下矢印を押すとブレーキがかかる車(またはランナー)のシミュレーションを作ってみましょう
+
+次は, 加速度のアルゴリズム #2 の __完全にランダムな加速度__ です.
+今度は, オブジェクトのコンストラクタで加速度を初期化するのではなく, サイクルごとに, つまり `update()` が呼び出される度に, 新しい加速度を取得します.
+
+```processing
+// Example 1.9: Motion 101 (速度とランダムな加速度)
+void update() {
+  acceleration = PVector.random2D(); // `random2d()` 関数は, ランダムな方向を指す長さ1のPVectorを返す
+  
+  velocity.add(acceleration);
+  velocity.limit(limit);
+  location.add(velocity);
+}
+```
+
+ランダムなベクトルは正規化されているので, 次のようにスケーリングします.
+
+(a) 加速度を定数値にスケーリング
+
+```processing
+acceleration = PVector.random2D();
+acceleration.mult(0.5); // <- 等加速度:
+```
+
+(b) 加速度をランダムにスケーリング
+
+```processing
+acceleration = PVector.random2D();
+acceleration.mult(random(2)); // <- ランダムな加速度:
+```
+- [ ] Exercise 1.6 「はじめに」を参照し, パーリンノイズに準じた加速度を実装してください:
+
+```processing
+class Mover {
+  float latestAcceleration;
+  
+  Mover() {
+    // ...
+    latestAcceleration = random(2);
+  }
+  
+  void update() {
+    // ...
+    flaot a = noise(latestAcceleration);
+    acceration.mult(noise(a));
+    latestAcceleration = a;
+    // ...
+  }
+}
+```
+
+## <a id="section-1_9"></a> 1.9 static 関数と非 static 関数
+PVector クラスの使用についてもう一つ理解しておくべきことがあります.
+__static__ (静的) メソッドと __非static__ メソッドの使用の違いです.
+
+次のコードを見てください.
+
+```processing
+float x = 0;
+flaot y = 5;
+
+x = x + y;
+```
+PVector で同じようなコードを書くのも簡単です.
+
+```processing
+PVector v = new PVector(0, 0);
+PVector u = new PVector(4, 5);
+v.add(u);
+```
+
+```processing
+float x = 0;
+float y = 5;
+flaot z = x + y;
+```
+PVector での算術演算となると少し複雑です.
+
+```processing
+PVector v = new PVector(0, 0);
+PVector u = new PVector(4, 5);
+
+PVector w = v.add(u); // 気をつけて! これは間違い!
+```
+
+このコードでは目的を果たせないことがわかります.
+2つのPVectorオブジェクトを加算し, その結果を新しいPVectorとして返すためには, static な `add()` 関数を使用しなくてはなりません.
+
+クラス名自体で呼び出す関数を, __static関数__ と呼びます.
+
+```processing
+PVector.add(v, u);  // <- static    : クラスで呼び出し
+v.add(u);           // <- 非static  : オブジェクトインスタンスでの呼び出し
+```
+
+Processing で static関数を
+
 ## <a id="section-1_10"></a> 1.10
