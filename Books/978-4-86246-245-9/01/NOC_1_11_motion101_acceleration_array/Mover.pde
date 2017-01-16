@@ -16,7 +16,7 @@ class Mover {
   
   void update() {
     PVector mouse = new PVector(mouseX, mouseY);
-    acceleration = PVector(mouse, position);
+    acceleration = PVector.sub(mouse, position);
     acceleration.normalize();
     acceleration.mult(0.2);
     
