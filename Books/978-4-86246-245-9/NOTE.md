@@ -30,6 +30,8 @@
 - __Velocity__ - 速度
 - __Acceleration__ - 加速度
 - __Friction__ - 摩擦
+- [不平衡力](https://kotobank.jp/word/%E4%B8%8D%E5%B9%B3%E8%A1%A1-776350)
+- [散逸力](https://ja.wikipedia.org/wiki/%E6%95%A3%E9%80%B8)
 
 ## Snippet
 
