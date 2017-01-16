@@ -649,7 +649,7 @@ class Mover {
   
   void update() {
     // ...
-    flaot a = noise(latestAcceleration);
+    float a = noise(latestAcceleration);
     acceration.mult(noise(a));
     latestAcceleration = a;
     // ...
@@ -665,7 +665,7 @@ __static__ (静的) メソッドと __非static__ メソッドの使用の違い
 
 ```processing
 float x = 0;
-flaot y = 5;
+float y = 5;
 
 x = x + y;
 ```
@@ -680,7 +680,7 @@ v.add(u);
 ```processing
 float x = 0;
 float y = 5;
-flaot z = x + y;
+float z = x + y;
 ```
 PVector での算術演算となると少し複雑です.
 
