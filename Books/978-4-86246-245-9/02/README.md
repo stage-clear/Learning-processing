@@ -496,26 +496,26 @@ friction.mult(frictionMag); // <- 単位ベクトルを取得し, これに大�
 
 ```processing
 void draw() {
- background(255);
+  background(255);
  
- PVector wind = new PVector(0.001, 0);
- PVector gravity = new PVector(0, 0.1); // <- より正確にするために質量でスケーリング
+  PVector wind = new PVector(0.001, 0);
+  PVector gravity = new PVector(0, 0.1); // <- より正確にするために質量でスケーリング
  
- for (int i = 0; i < movers.length; i++) {
-  float c = 0.01;
+  for (int i = 0; i < movers.length; i++) {
+    float c = 0.01;
   
-  PVector friction = movers[i].velocity.get();
-  friction.mult(-1);
-  friction.normalize();
-  friction.mult(c);
+    PVector friction = movers[i].velocity.get();
+    friction.mult(-1);
+    friction.normalize();
+    friction.mult(c);
   
-  movers[i].applyForce(friction); // <- 摩擦力のベクトルをオブジェクトに適用
-  movers[i].applyForce(wind);
-  movers[i].applyForce(gravity);
-  movers[i].update();
-  movers[i].display();
-  movers[i].checkEdges();
- }
+    movers[i].applyForce(friction); // <- 摩擦力のベクトルをオブジェクトに適用
+    movers[i].applyForce(wind);
+    movers[i].applyForce(gravity);
+    movers[i].update();
+    movers[i].display();
+    movers[i].checkEdges();
+  }
 }
 ```
 
@@ -556,8 +556,60 @@ drag.mult(-1);                           // <- 公式の後半部分(向き): -1
 drag.normalize();
 drag.mult(dragMagnitude);                // 大きさと向きを結合
 ```
+それでは, Mover クラスに1追加してこの力を組み込みましょう.
+摩擦の例を作成したとき, 摩擦の力は常に存在していました. 物体が動いている場合, 摩擦によって必ず速度が低下します.
+さて, ここで環境に要素「液体（Liquid）」を追加しましょう.
 
+```processing
+class Liquid {
+  flaot x, y, w, h; // Liquid オブジェクトには, 抗力係数を定義する変数が含まれる:
+  float c;
+ 
+  Liquid(float x_, float y_, float w_, float h_, float c_) {
+    x = x_;
+    y = y_;
+    w = w_;
+    h = h_;
+    c = c_;
+  }
+  
+  void display() {
+    noStroke();
+    fill(175);
+    rect(x, y, w, h);
+  }
+}
+```
 
+メインプログラムには, __Liquid__オブジェクトの参照と, そのオブジェクトを初期化する1行のコードを追加します.
 
-## <a id="section-2_9"></a>2.9
+```processing
+Liquid liquid;
+
+void setup() {
+  liquid = new Liquid(0, height/2, width, height/2, 0.1);
+  // Liquid オブジェクトを初期化. 係数が小さい(0.1)ことに注目
+  // こうしないとオブジェクトは, かなり早い時点で停止してしまう.
+  // (そのような効果が必要な場合もある)
+}
+```
+
+`Mover` オブジェクトどうやって `Liquid` オブジェクトと対話させるのでしょうか? 
+ここで私たちがシミュレートしたいことは次の通りです
+
+> Mover オブジェクトが液体を通り抜けるとき, 抗力がかかる
+
+オブジェクト指向で表現すると次のようになります.
+
+```processing
+if (liquid.contains(movers[i])) {
+  PVector dragForce = liquid.drag(movers[i]); // <- 抗力を計算
+  movers[i].applyForce(dragForce);            // Mover に抗力を適用
+}
+```
+
+このコードから `Mover` クラスに2つクラスを追加する必要があることが分かります.
+`Mover` オブジェクトが `Liquid` オブジェクト内にあるかどうかを判定する関数と, `Mover` オブジェクトに適用する抗力です.
+
+## <a id="section-2_9"></a>2.9 
 ## <a id="section-2_10"></a>2.10
