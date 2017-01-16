@@ -36,10 +36,9 @@
 - [散逸力](https://ja.wikipedia.org/wiki/%E6%95%A3%E9%80%B8) - 非保存力
 - [摩擦係数](https://ja.wikipedia.org/wiki/%E6%91%A9%E6%93%A6%E5%8A%9B) - (μ). 特定の表面における摩擦力の強さを決定します
 - [垂直抗力](https://ja.wikipedia.org/wiki/%E5%9E%82%E7%9B%B4%E6%8A%97%E5%8A%9B) _normal force_(N) - 表面上を動く物体の運動に直交する力
-- [粘性力](https://ja.wikipedia.org/wiki/%E7%B2%98%E5%BA%A6) _viscous force_ - 
-- [抗力](https://ja.wikipedia.org/wiki/%E6%8A%97%E5%8A%9B) _drag force_ - 
-- [流体抵抗]() _fluid resistance_
-
+- [粘性力](https://ja.wikipedia.org/wiki/%E7%B2%98%E5%BA%A6) _viscous force_, [抗力](https://ja.wikipedia.org/wiki/%E6%8A%97%E5%8A%9B) _drag force_, [流体抵抗]() _fluid resistance_
+ - すべて同じことを意味します
+ 
 ## Snippet
 
 - __以前の軌跡を残す__
