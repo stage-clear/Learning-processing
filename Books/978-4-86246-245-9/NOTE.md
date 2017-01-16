@@ -23,9 +23,9 @@
  1. このベクトルを加速度に代入します
 - __加速度はすべての力の合計を質量で割ったものに等しい__
  - これを実装するためには__力の積算__を行います. これはとても単純で, すべての力を合計するだけです.
- - __摩擦__: <sup>摩擦は速度の反対方向を指している</sup> <sup>[説明](https://github.com/stage-clear/Learning-processing/blob/master/Books/978-4-86246-245-9/02/README.md#section-2_7)</sup>
+ - __摩擦__: <sup>(摩擦は速度の反対方向を指している)</sup> <sup>([説明](https://github.com/stage-clear/Learning-processing/blob/master/Books/978-4-86246-245-9/02/README.md#section-2_7))</sup>
  - `Friction = -1 * μ * N * v^`
-- __抗力__: <sup>[説明](https://github.com/stage-clear/Learning-processing/blob/master/Books/978-4-86246-245-9/02/README.md#section-2_8)</sup>
+- __抗力__: <sup>([説明](https://github.com/stage-clear/Learning-processing/blob/master/Books/978-4-86246-245-9/02/README.md#section-2_8))</sup>
  - `Fd = ‖v‖2 * cd * v * -1`
 
 ## Word
