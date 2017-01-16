@@ -5,7 +5,7 @@ class Mover {
   PVector position;
   PVector velocity;
   PVector acceleration;
-  flaot topspeed;
+  float topspeed;
   
   Mover() {
     position = new PVector(width / 2, height / 2);
