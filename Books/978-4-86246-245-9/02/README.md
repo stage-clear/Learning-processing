@@ -108,7 +108,7 @@ mover.applyForce(gravity);
 
 ```processing
 void applyForce(PVector force) {
-  acceleration = force; // 最も単純な形のニュートンの第2法則
+  acceleration = force; // 最も単純な形のニュートンの第2法則
 }
 ```
 
@@ -181,8 +181,8 @@ class Mover {
 }
 ```
 
-> __計測単位__
-> 現実世界では, 何かを計測するときには特定の単位を使います.
+> __計測単位__  
+> 現実世界では, 何かを計測するときには特定の単位を使います.  
 > 例えば, 2つの物体の距離は3メートルだ, 今の球速は90マイルだ, このボーリングの球の重さは6キログラムだ, などと言います.
 > 私たちの計測単位はピクセルと, アニメーションフレームです. 質量については, 使用する計測単位が存在しません.
 
@@ -245,10 +245,159 @@ void applyForce(PVector force) {
 ```
 
 ## <a id="section-2_5"></a>2.5 力の作成
+これまでの成果を振り返ってみましょう.
+力の正体（ベクトル）がわかりました.
+オブジェクトに力を適用する方法（質量で除算し, オブジェクトの加速度ベクトルに加算する）も分かりました.
+足りないものは何でしょうか? そう, そもそもの力はどうやって得たらよいかがまだ分かっていません. 力はどこからやって来るのでしょう?
 
+Processing の世界で力を作るための2つの方法を紹介します.
 
+1. __力を作り出す__: プログラマーであるあなたが創造主です. 力を作り出してそれを適用してはいけない理由はありません.
+2. __力をシミュレートする__: そう, 力は現実の世界に存在し, 物理の教科書には力の公式が書かれています. その公式をソースコードに組み込めば, Processing で現実世界の力を模倣することができます.
 
-## <a id="section-2_6"></a>2.6
+力を作るための最も簡単な方法は, 数値を選ぶというものです.
+```processing
+// 右向きのかなり弱い風をシミュレートすることを考える
+PVector wind = new PVector(0.01, 0);
+m.applyForce(wind);
+```
+
+風と重力のように, 2つの力が必要な場合には, 次のように書くことができます.
+
+```processing
+// Example 2.1: 力
+PVector wind = new PVector(0.01, 0);
+PVector gravity = new PVector(0, 0.1);
+m.applyForce(wind);
+m.applyForce(gravity);
+```
+
+次に, 質量がそれぞれ違う異なるたくさんのオブジェクトを追加して, この例をもう少し面白くしていきましょう.
+
+```processing
+class Mover {
+ PVector location;
+ PVector velocity;
+ PVector acceleration;
+ float mass; // <- オブジェクトは質量を持つ!
+ 
+ Mover() {
+  mass = 1; // <- 単純化するため質量を1に設定
+  location = new PVector(30, 30);
+  velocity = new PVector(0, 0);
+  acceleration = new PVector(0, 0);
+ }
+ 
+ void applyForce(PVector force) { // <- ニュートンの第2法則:
+  PVector f = PVector.div(force, mass); // 力を受け取って質量で除算し, 加速度に加算
+  acceleration.add(f);
+ }
+ 
+ void update() {
+  velocity.add(acceleration);     // Motion 101
+  location.add(velocity);
+  acceleration.mult(0);           // 加速を毎回クリアする処理を追加!
+ }
+ 
+ void display() {
+  stroke(0);
+  fill(175);
+  ellipse(location.x, location.y, mass * 16, mass * 16);
+  // 質量に応じてサイズをスケーリング
+ }
+ 
+ void checkEdges() {
+  // ウィンドウの端にぶつかったオブジェクトのバウンドを若干恣意的に決定
+  if (location.x > width) {
+   location.x = width;
+   velocity.x *= -1;
+  } else if (location.x < 0) {
+   location.x = 0;
+   velocity.x *= -1;
+  }
+
+  if (location.y > height) {
+   // 位置と速度には直接触れないと述べたが, 一部例外あり.
+   // ここでは, 端に達したオブジェクトの方向を簡単に反転させるため,
+   // 位置と速度を直接操作
+   location.y = height;
+   velocity.y *= -1;
+  }
+ }
+}
+```
+
+配列を使って `Mover` オブジェクトを100個作りましょう.
+
+```processing
+Mover[] movers = new Mover[100];
+```
+
+そして `setup()` でループを使って100個の `Mover` オブジェクトを初期化します
+
+```processing
+void setup() {
+ for (int i = 0; i < mover.length; i++) {
+  movers[i] = new Mover();
+ }
+}
+```
+
+ここでちょっと問題があります.
+`Mover` オブジェクトのコンストラクタを見直してみましょう.
+
+```processing
+Mover() {
+ mass = 1; // すべてのオブジェクトの質量が1に, 位置が(30,30) になる:
+ location = new PVector(30, 30);
+ // ...
+}
+```
+
+さまざまな質量の `Mover` オブジェクトを, さまざまな位置に生成するためには,
+引数を追加して, コンストラクタの洗練度を上げる必要があります.
+
+```processing
+Mover(float m, float x, float y) {
+ // 引数を使ってこれらの変数を設定
+ mass = m;
+ location = new PVector(x, y);
+}
+```
+
+```processing
+void setup() {
+ for (int i = 0; i < movers.length; i++) {
+  movers[i] = new Mover(random(0, 1.5), 0, 0);
+ }
+}
+```
+
+```processing
+// Example 2.2: 多数のオブジェクトに作用する力
+void draw() {
+ background(255);
+ 
+ PVector wind = new PVector(0.01, 0);
+ PVector gravity = new PVector(0, 0.1); // 2つの力を作成
+ 
+ for (int i = 0; i < movers.length; i++) {
+  movers[i].applyForce(wind);
+  movers[i].applyForce(gravity);
+  movers[i].update();
+  movers[i].display();
+  movers[i].checkEdges();
+ }
+}
+```
+
+- [ ] __Exercise 2.3__ 
+ - オブジェクトが壁の端で跳ね返るのではなく, 見えない力がはたらいてウィンドウから出ないように押し戻されるという例を作成してください.
+   例えば, 端に近づくほど力が強くなるなど, 端から距離に準じて力に重みを付けてみましょう.
+
+## <a id="section-2_6"></a>2.6 地球の重力と力のシミュレーション
+:
+
 ## <a id="section-2_7"></a>2.7
 ## <a id="section-2_8"></a>2.8
 ## <a id="section-2_9"></a>2.9
