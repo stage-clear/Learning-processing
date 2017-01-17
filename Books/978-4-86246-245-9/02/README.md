@@ -276,54 +276,54 @@ m.applyForce(gravity);
 
 ```processing
 class Mover {
- PVector location;
- PVector velocity;
- PVector acceleration;
- float mass; // <- オブジェクトは質量を持つ!
+  PVector location;
+  PVector velocity;
+  PVector acceleration;
+  float mass; // <- オブジェクトは質量を持つ!
  
- Mover() {
-  mass = 1; // <- 単純化するため質量を1に設定
-  location = new PVector(30, 30);
-  velocity = new PVector(0, 0);
-  acceleration = new PVector(0, 0);
- }
- 
- void applyForce(PVector force) { // <- ニュートンの第2法則:
-  PVector f = PVector.div(force, mass); // 力を受け取って質量で除算し, 加速度に加算
-  acceleration.add(f);
- }
- 
- void update() {
-  velocity.add(acceleration);     // Motion 101
-  location.add(velocity);
-  acceleration.mult(0);           // 加速を毎回クリアする処理を追加!
- }
- 
- void display() {
-  stroke(0);
-  fill(175);
-  ellipse(location.x, location.y, mass * 16, mass * 16);
-  // 質量に応じてサイズをスケーリング
- }
- 
- void checkEdges() {
-  // ウィンドウの端にぶつかったオブジェクトのバウンドを若干恣意的に決定
-  if (location.x > width) {
-   location.x = width;
-   velocity.x *= -1;
-  } else if (location.x < 0) {
-   location.x = 0;
-   velocity.x *= -1;
+  Mover() {
+    mass = 1; // <- 単純化するため質量を1に設定
+    location = new PVector(30, 30);
+    velocity = new PVector(0, 0);
+    acceleration = new PVector(0, 0);
   }
+ 
+  void applyForce(PVector force) { // <- ニュートンの第2法則:
+    PVector f = PVector.div(force, mass); // 力を受け取って質量で除算し, 加速度に加算
+    acceleration.add(f);
+  }
+ 
+  void update() {
+    velocity.add(acceleration);     // Motion 101
+    location.add(velocity);
+    acceleration.mult(0);           // 加速を毎回クリアする処理を追加!
+  }
+ 
+  void display() {
+    stroke(0);
+    fill(175);
+    ellipse(location.x, location.y, mass * 16, mass * 16);
+    // 質量に応じてサイズをスケーリング
+  }
+ 
+  void checkEdges() {
+    // ウィンドウの端にぶつかったオブジェクトのバウンドを若干恣意的に決定
+    if (location.x > width) {
+      location.x = width;
+      velocity.x *= -1;
+    } else if (location.x < 0) {
+      location.x = 0;
+      velocity.x *= -1;
+    }
 
-  if (location.y > height) {
-   // 位置と速度には直接触れないと述べたが, 一部例外あり.
-   // ここでは, 端に達したオブジェクトの方向を簡単に反転させるため,
-   // 位置と速度を直接操作
-   location.y = height;
-   velocity.y *= -1;
+    if (location.y > height) {
+      // 位置と速度には直接触れないと述べたが, 一部例外あり.
+      // ここでは, 端に達したオブジェクトの方向を簡単に反転させるため,
+      // 位置と速度を直接操作
+      location.y = height;
+      velocity.y *= -1;
+    }
   }
- }
 }
 ```
 
@@ -337,9 +337,9 @@ Mover[] movers = new Mover[100];
 
 ```processing
 void setup() {
- for (int i = 0; i < mover.length; i++) {
-  movers[i] = new Mover();
- }
+  for (int i = 0; i < mover.length; i++) {
+    movers[i] = new Mover();
+  }
 }
 ```
 
@@ -348,9 +348,9 @@ void setup() {
 
 ```processing
 Mover() {
- mass = 1; // すべてのオブジェクトの質量が1に, 位置が(30,30) になる:
- location = new PVector(30, 30);
- // ...
+  mass = 1; // すべてのオブジェクトの質量が1に, 位置が(30,30) になる:
+  location = new PVector(30, 30);
+  // ...
 }
 ```
 
@@ -359,35 +359,35 @@ Mover() {
 
 ```processing
 Mover(float m, float x, float y) {
- // 引数を使ってこれらの変数を設定
- mass = m;
- location = new PVector(x, y);
+  // 引数を使ってこれらの変数を設定
+  mass = m;
+  location = new PVector(x, y);
 }
 ```
 
 ```processing
 void setup() {
- for (int i = 0; i < movers.length; i++) {
-  movers[i] = new Mover(random(0, 1.5), 0, 0);
- }
+  for (int i = 0; i < movers.length; i++) {
+    movers[i] = new Mover(random(0, 1.5), 0, 0);
+  }
 }
 ```
 
 ```processing
 // Example 2.2: 多数のオブジェクトに作用する力
 void draw() {
- background(255);
+  background(255);
  
- PVector wind = new PVector(0.01, 0);
- PVector gravity = new PVector(0, 0.1); // 2つの力を作成
+  PVector wind = new PVector(0.01, 0);
+  PVector gravity = new PVector(0, 0.1); // 2つの力を作成
  
- for (int i = 0; i < movers.length; i++) {
-  movers[i].applyForce(wind);
-  movers[i].applyForce(gravity);
-  movers[i].update();
-  movers[i].display();
-  movers[i].checkEdges();
- }
+  for (int i = 0; i < movers.length; i++) {
+    movers[i].applyForce(wind);
+    movers[i].applyForce(gravity);
+    movers[i].update();
+    movers[i].display();
+    movers[i].checkEdges();
+  }
 }
 ```
 この実行結果では, 小さい円の方が, 大きい円よりも早くウィンドウの右に到達していることに注目してください.
@@ -406,15 +406,15 @@ void draw() {
 // Example 2.3: 重力を質量でスケーリング
 
 for (int i = 0; i < movers.length; i++) {
- PVector wind = new PVector(0.001, 0);
- float m = movers[i].mass;
- PVector gravity = new PVector(0, 0.1*m); // より正確にするため 重力を質量でスケーリング
- movers[i].applyForce(wind);
- movers[i].applyForce(gravity);
+  PVector wind = new PVector(0.001, 0);
+  float m = movers[i].mass;
+  PVector gravity = new PVector(0, 0.1*m); // より正確にするため 重力を質量でスケーリング
+  movers[i].applyForce(wind);
+  movers[i].applyForce(gravity);
 
- movers[i].update();
- movers[i].display();
- movers[i].checkEdges();
+  movers[i].update();
+  movers[i].display();
+  movers[i].checkEdges();
 }
 ```
 
@@ -425,8 +425,8 @@ for (int i = 0; i < movers.length; i++) {
 
 - 力の背後にある概念を理解する
 - 力の公式を次の2つに分けて考える
- - 力の方向をどう計算するか?
- - 力の大きさをどう計算するか?
+  - 力の方向をどう計算するか?
+  - 力の大きさをどう計算するか?
 - これらの公式を `PVector` を計算する Processing コードとして記述し, この `PVector` を `Mover` の `applyForce()` 関数を通じて適用する
 
 > __公式に扱い方__  
@@ -610,6 +610,78 @@ if (liquid.contains(movers[i])) {
 
 このコードから `Mover` クラスに2つクラスを追加する必要があることが分かります.
 `Mover` オブジェクトが `Liquid` オブジェクト内にあるかどうかを判定する関数と, `Mover` オブジェクトに適用する抗力です.
+
+1つ目の関数は簡単です. 位置ベクトルga `liquid` によって定義された長方形の中にあるかどうかを, 単に条件文を使って判定します.
+
+```processing
+boolean contains() {
+  PVector l = m.location;
+  return l.x > x && l.x < x + w && l.y > y && l.y < y + h;
+  // PVector の位置が Liquid クラスによって
+  // 定義された長方形の中にあるかどうかを判定
+}
+```
+
+抗力は, __抗力係数に Mover の速さの2乗を掛けて, 向きを速度の反対にしたものと同じ__です.
+
+```processing
+PVector drag(Mover m) {
+  float speed = m.velocity.mag();
+  float dragMagnitude = c * speed * speed; // 力の大きさ: 抗力係数 * 速さの2乗
+ 
+  PVector dragForce = m.velocity.get();
+  dragForce.mult(-1);                      // 力の向き: -1 * 速度
+ 
+  dragForce.normalize();
+  dragForce.mult(dragMagnitude);           // 力の最終決定: 大きさと向きをまとめる
+  return dragForce;
+}
+```
+
+この2つの関数を Mover クラスに追加したら, メインタブでひとまとめにします.
+
+```processing
+// Example 2.5: 流体抵抗
+Mover[] movers = new Mover[9];
+
+Liquid liquid;
+
+void setup() {
+  size(640, 360);
+  reset();
+  liquid = new Liquid(0, height / 2, width, height / 2, 0.1); 
+}
+
+void draw() {
+  background(255);
+  
+  liquid.display();
+  
+  for (int i = 0; i < movers.length; i++) {
+    if (liquid.contains(movers[i])) {             // Mover は Liquid 内にあるか?
+      PVector dragForce = liquid.drag(movers[i]); // 抗力を計算
+      movers[i].applyForce(dragForce);            // Mover 抗力を適用
+    }
+    
+    PVector gravity = new PVector(0, 0.1 * movers[i].mass); // 質量に準じて重力をスケーリング
+    movers[i].applyForce(gravity);                // 重力を適用
+    
+    movers[i].update();                           // 表示を更新
+    movers[i].display();
+    movers[i].checkEdges();
+  }
+}
+```:
+
+- [ ] __Exercise 2.5__
+  - もう一度, 簡略化した抗力の公式を見てください. __抗力 = 係数 * 速さ * 速さ__です.
+    オブジェクトの移動速度が遅いほど, それに対する抗力も大きくなります. 実際, 水中で静止しているオブジェクトに抗力が全くかかりません.
+    この例を応用して, 異なる高さからボールを落としてみましょう. 高さが異なることで, ボールが水に衝突したときの抗力にどのような影響がありますか?
+- [ ] __Exercise 2.6__
+  - 抗力の公式には, 表面も含まれていました. 水に当たる辺の長さに準じた抗力を考慮して, 箱を水に落とした場合のシミュレーションを作成してください.
+- [ ] __Exercise 2.7__
+  - 流体抵抗は速度ベクトルの反対方向だけでなく, 速度ベクトルの垂直方向にもはたらきます.
+    これは「誘導抗力」と呼ばれ, 角度の付いた翼を持った飛行機が上昇するのはこのためです. 上昇のシミュレーションを作成してみましょう.
 
 ## <a id="section-2_9"></a>2.9 
 ## <a id="section-2_10"></a>2.10
