@@ -27,7 +27,8 @@
  - `Friction = -1 * μ * N * v^`
 - __抗力__: <sup>([説明](https://github.com/stage-clear/Learning-processing/blob/master/Books/978-4-86246-245-9/02/README.md#section-2_8))</sup>
  - `Fd = ‖v‖2 * cd * v * -1`
-
+ - 抗力は, __抗力係数に Mover の速さの2乗を掛けて, 向きを速度の反対にしたものと同じ__です.
+ 
 ## Word
 - __Location__ - 位置
 - __Position__ - 位置
