@@ -14,7 +14,12 @@ class Liquid {
   }
   
   boolean contains(Mover m) {
-    float speed = m.velocity.mag();
+    PVector l = m.position;
+    return l.x > x && l.x < x + w && l.y > y && l.y < y + h;
+  }
+  
+  PVector drag(Mover m) {
+    float speed = m.velocity.get();
     float dragMagnitude = c * speed * speed;
     
     PVector dragForce = m.velocity.get();
