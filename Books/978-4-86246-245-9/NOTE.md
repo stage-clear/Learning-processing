@@ -46,7 +46,7 @@
 ## Snippet
 
 - __以前の軌跡を残す__
-```
+```processing
 void draw() {
  fill(255, 0);
  rect(0,0, width, height);
