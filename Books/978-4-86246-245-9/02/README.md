@@ -683,5 +683,281 @@ void draw() {
   - 流体抵抗は速度ベクトルの反対方向だけでなく, 速度ベクトルの垂直方向にもはたらきます.
     これは「誘導抗力」と呼ばれ, 角度の付いた翼を持った飛行機が上昇するのはこのためです. 上昇のシミュレーションを作成してみましょう.
 
-## <a id="section-2_9"></a>2.9 
-## <a id="section-2_10"></a>2.10
+## <a id="section-2_9"></a>2.9 重力
+以下は, これらの力の強さを計算するための公式です.
+<img src="https://userscontent2.emaze.com/images/7dd09fd6-ad38-470a-8c7c-dd15425571a8/959ab801-b554-49e1-9346-3203d578eedc.jpg" width="200" height="auto">
+<sup>(書籍の図では最後に `r^` を掛けています)</sup>
+
+- F は重力を表します. これは, 私たちが最終的に求めて `applyForce()` に渡したいベクトルです.
+- G は__万有引力定数__です. これは私たちの世界では 6.67428×10<sup>-11</sup>立方メートル毎キログラム毎秒毎秒です.
+  しかし, Processingプログラマーにとっては重要な数値ではありません. これも, 私たちが作り出す世界の力の強弱を決めるために使用する定数です.
+  これを1にしたり, 無視したりするのも悪くない選択です.
+- m1とm2は物体1と物体2の質量です. ニュートンの第2法則(`F→ = M × A→`)で見たように, 質量はやはり無視しても構わないものです.
+  しかし, これらの値を持っていることで, 小さい物体よりも「大きい」物体にかかる重力の方が強いという, 面白みのあるシミュレーションを作成することができます.
+- r<sup>^</sup>は, 物体1から物体2への単位ベクトルを表します. この後見ていきますが, この方向ベクトルは, 1つの物体からもう1つの物体の位置を減算することによって求めることができます.
+- r<sup>2</sup>は, 2つの物体間の距離を2乗したものを表します.  
+  この公式上のすべて, つまり G, m1, m2 において、値が大きいほど力が強くなります.
+  質量が大きいと, 力が大きい. Gが大きいと, 力が大きい. ただし, 何かで割ったときは逆になります.
+  力の強さは, 距離の2乗に反比例します. オブジェクトが__遠い__ほど力が__弱く__なり, __近い__ほど__強く__なります.:
+
+Processing コードで表す方法を考えていきましょう.
+
+物体が2つあり:
+
+1. それぞれの位置を持ちます : `PVector location1` と `PVector location2`
+2. それぞれに質量を持ちます : `float mass1` と `float mass2`
+3. 万有引力定数を表す変数を `float G` とします
+
+これらを前提として, 重力 `PVector force` を計算したいのです.
+その処理は2つに分けて行います. 前半部分で力 `r^` の向きを計算します.
+後半部分では, 質量と距離に準じた力の強さを計算します.
+
+ベクトルは2点間の差です. ベクトルを作成するには, 単純に1つの点からもう1つの点を減算します.
+
+```processing
+PVector dir = PVector.sub(location1, location2);
+dir.normalize();
+```
+
+求めたいのは方向だけを示す単位ベクトルであるため, 位置を減算した後にベクトルを__正規化__する必要があります.
+
+これで向きが求められました. 続いて大きさを計算し, それに応じてベクトルをスケーリングします.
+
+```processing
+float m = (G * mass1 * mass2) / (distance * distance);
+dir.mult(m);
+```
+
+残る問題はただ1つ. 距離がわからないことです.
+G, mass1, mass2 はすべて与えられていますが, 上のコードを機能させるためには, 実際に距離を計算する必要あります.
+つい先ほど, 1つの位置から1つの位置を指すベクトルを作りませんでしたっけ?
+そのベクトルの長さは, 2つの物体の間の距離ですよね.
+
+そう, 正規化する前にたった1行を追加し, そのベクトルの大きさを取得しておけば距離がわかるのです.
+
+```processing
+PVector force = PVector.sub(location1, location2); // 1つの物体からもう1つの物体を指すベクトル
+float distance = force.magnitude(); // <- このベクトルの長さ（大きさ）が2つのオブジェクト間の距離
+float m = (G * mass1 * mass2) / (distance * distance); // 重力の公式を使って力の強さを求める
+
+force.normalize(); // 力ベクトルを正規化して適切な大きさにスケーリング
+force.mult(m);
+```
+
+最終的には, はじめに使った `PVector` こそがずっと求めていた実際の力のベクトルになるのです.
+
+Prcessing スケッチの適所に当てはめていきます.
+
+- `Mover` オブジェクト - `Attractor` オブジェクトに向かう引力が作用します.
+- `Attractor` オブジェクト
+
+```processing
+class Attractor {
+  float mass; // Attractor は移動しない単純なオブジェクト. 必要なのは質量と位置のみ
+  PVector location;
+  
+  Attractor() {
+    location = new PVector(width / 2, height / 2);
+    mass = 20;
+  }
+  
+  void display() {
+    stroke(0);
+    fill(175, 200);
+    ellipse(location.x, location.y, mass * 2, mass * 2);
+  }
+}
+```
+
+メインプログラムに `Attractor` クラスのインスタンスを追加します.
+
+```processing
+Mover m;
+Attractor a;
+
+void setup() {
+  size(640, 360);
+  m = new Mover();
+  a = new Attractor(); // Attractor オブジェクトを初期化
+}
+
+void draw() {
+  background(255);
+  
+  a.display(); // Attractor オブジェクトを描画
+  
+  m.update();
+  m.display();
+}
+```
+
+このパズルを完成するための最後のピースは, 一方のオブジェクトにもう一方のオブジェクトを引き付けさせる方法です.
+これにはいくつかの方法があります.
+
+- `Attractor`と`Mover`の両方を受け取る関数 - `attraction(a, m)`
+- `Mover`を受け取る`Attractor`クラスの関数 - `a.attract(m)`
+- `Attractor`を受け取る`Mover`クラスの関数 - `m.attractedTo(a)`
+- `Mover`を受け取って`PVector`（引力）を返す`Attractor`クラスの関数. この引力を`Mover`の`applyForce()`関数に渡します. - `PVector f = a.attract(m); m.applyForce(f)`
+
+つまり, 以前は次のように処理していたところを:
+
+```processing
+PVector f = new PVector(0.1, 0); // 力の作成
+m.applyForce(f);
+```
+
+次のようにします.
+
+```processing
+PVector f = a.attract(m); // 2つのオブジェクト間の引力
+m.applyForce(f);
+```
+
+このため, `draw()` 関数は以下のようになります.
+
+```processing
+void draw() {
+  background(255);
+  
+  PVector f = a.attract(m); // 引力を計算して適用
+  m.applyForce(f);
+  
+  m.update();
+  
+  a.display();
+  m.display();
+}
+```
+
+`attract()` 関数を `Attractor` クラス内に置くことにしたため, 実際にこの関数を書く必要があります.
+
+```processing
+PVector attract(Mover m) {
+
+}
+```
+
+さて, この関数の中に何を記述しますか? 重力について解き明かした, あの素晴らしい式です!
+
+```processing
+PVector attract(Mover m) {
+  PVector force = PVector.sub(location, m.location); // 力の向きは?
+  float distance = force.mag();
+  force.normalize();
+  float strength = (G * mass* m.mass) / (distance * distance); // 力の大きさは?
+  force.mult(strength);
+  
+  return force; // 適用できるよう, 力を返す!
+}
+```
+
+ちょっとした問題が1つあります. 
+除算の記号を見たら必ず自分に問いかける必要があります.
+もしこの値がひどく小さい値だったら, または（もっと悪いことに）ゼロだったら, 一体どうなるだろうか, と.
+
+数値をゼロで割れないということはよろしいですね.
+さらに, 例えば 0.0001 で割るということは, 10,000 を掛けるのと同じです.
+
+このため, この公式を使うときは, `distance` の可能な範囲を制限するのが妥当です.
+
+```processing
+distance = constrain(distance, 5, 25);
+```
+
+最小距離を制限する必要があるのと同じ理由で, 最大距離も制限すると有効です.
+例えば `Attractor` オブジェクトから500px以上離れたりすると(ありえないことではありません), 力を25,000で割ることになります.
+この力は最終的に非常に弱くなり, まったく適用していないのと変わりません.
+
+```processing
+// Example 2.6: 引力
+Mover m;
+Attractor a;
+
+void setup() {
+  size(640, 360);
+  m = new Mover();
+  a = new Attractor();
+}
+
+void draw() {
+  background(255);
+  
+  PVector force = a.attract(m);
+  m.applyForce(force);
+  m.update();
+  
+  a.display();
+  m.display();
+}
+
+class Attractor {
+  float mass;
+  PVector location;
+  float G;
+  
+  Attractor() {
+    location = new PVector(width / 2, height / 2);
+    mass = 20;
+    G = 0.4;
+  }
+  
+  PVector attract(Mover m) {
+    PVector force = PVector.sub(location, m.location);
+    float distance = force.mag();
+    distance = constrain(distance, 5.0, 25.0); // 円が制御不能にならないよう, 距離を制御
+    force.normalize();
+    float strength = (G * mass * m.mass) / (distance * distance);
+    force.mult(strength);
+    return force;
+  }
+  
+  void display() {
+    stroke(0);
+    fill(175, 200);
+    ellipse(location.x, location.y, mass * 2, mass * 2);
+  }
+}
+```
+
+```processing
+// Example 2.7: 引力(多数のMoverがある場合):
+Mover[] movers = new Mover[10]; // Mover を10倍に!
+
+Attractor a;
+
+void setup() {
+  size(400, 400);
+  for (int i = 0; i < movers.length; i++) {
+    movers[i] = new Mover(random(0.1, 2), random(width), random(height));
+  }
+  a = new Attractor();  
+}
+
+void draw() {
+  background(255);
+  
+  a.display();
+  
+  for (int i = 0; i < movers.length; i++) {
+    PVector force = a.attract(movers[i]); // 各 Moverオブジェクトについて引力を計算
+    movers[i].applyForce(force);
+    
+    movers[i].update();
+    movers[i].display();
+  }
+}
+```
+
+- [ ] __Exercise 2.8__ :
+  - 上の例には, `Mover`オブジェクトのシステム(配列)と1つの`Attractor`オブジェクトがあります.
+    `Mover`オブジェクトと`Attractor`オブジェクトの両方のシステムがある例を作成してください.
+    `Attractor`オブジェクトを見えなくするとどうなるでしょう? `Attractor`オブジェクトの周りを動くオブジェクトの軌跡から, パターン/デザインを作成してみてください.
+    「[Metropop Denim project by Clayton Cubitt and Tom Carden](https://processing.org/exhibition/works/metropop/)」を参考にしてください.
+- [ ]: __Exercise 2.9__:
+  - 重力をモデルとして, 独自の力を作り出すこともできます.
+    この章では, 重力を利用したスケッチの作成だけを勧めているわけではありません. 
+    むしろ, 物体の動作を操るオリジナルの法則を生み出す方法を工夫してみるべきです.
+    例えば, 近づくほど弱く, 遠ざかるほど強くなる力をデザインするとどうなるでしょうか?
+    または, 遠くにあるオブジェクトを引き寄せ, 近くにあるオブジェクトを遠ざけるような `Attractor` オブジェクトをデザインしてみたらどうでしょう?
+  
+## <a id="section-2_10"></a>2.10 相互引力と反発
