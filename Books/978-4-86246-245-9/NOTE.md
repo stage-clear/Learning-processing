@@ -41,6 +41,7 @@
 - [垂直抗力](https://ja.wikipedia.org/wiki/%E5%9E%82%E7%9B%B4%E6%8A%97%E5%8A%9B) _normal force_(N) - 表面上を動く物体の運動に直交する力
 - [粘性力](https://ja.wikipedia.org/wiki/%E7%B2%98%E5%BA%A6) _viscous force_, [抗力](https://ja.wikipedia.org/wiki/%E6%8A%97%E5%8A%9B) _drag force_, [流体抵抗]() _fluid resistance_
  - すべて同じことを意味します
+- [誘導抗力](https://ja.wikipedia.org/wiki/%E7%BF%BC%E5%B9%85%E8%8D%B7%E9%87%8D) - 速度ベクトルの垂直方向にはたらく抗力:
  
 ## Snippet
 
