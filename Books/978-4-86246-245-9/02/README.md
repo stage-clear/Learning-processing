@@ -953,6 +953,7 @@ void draw() {
     `Mover`オブジェクトと`Attractor`オブジェクトの両方のシステムがある例を作成してください.
     `Attractor`オブジェクトを見えなくするとどうなるでしょう? `Attractor`オブジェクトの周りを動くオブジェクトの軌跡から, パターン/デザインを作成してみてください.
     「[Metropop Denim project by Clayton Cubitt and Tom Carden](https://processing.org/exhibition/works/metropop/)」を参考にしてください.
+
 - [ ]: __Exercise 2.9__:
   - 重力をモデルとして, 独自の力を作り出すこともできます.
     この章では, 重力を利用したスケッチの作成だけを勧めているわけではありません. 
@@ -961,3 +962,43 @@ void draw() {
     または, 遠くにあるオブジェクトを引き寄せ, 近くにあるオブジェクトを遠ざけるような `Attractor` オブジェクトをデザインしてみたらどうでしょう?
   
 ## <a id="section-2_10"></a>2.10 相互引力と反発
+次は__多数のオブジェクトが互いに引き合う__というシミュレーションを作成します.
+
+```processing
+Mover[] movers = new Mover[10]j;
+
+void setup() {
+  size(400, 400);
+  for (int i = 0; i < movers.length; i++) {
+    movers[i] = new Mover(random(0.1, 2), random(width), random(height));
+  }
+}
+
+void draw() {
+  background(255);
+  
+  for (int i = 0; i < movers.length; i++) {
+    movers[i].update();
+    movers[i].display();
+  }
+}
+```
+
+からくりは `draw()` 関数の中に仕掛けます.
+現在の命令は「すべての `mover i` について, 自身をアップデートし表示しなさい」というものです.
+これを, 「すべての `mover i`について, そのほかのすべての`mover j`に引き付けられるように, 自身をアップデートしなさい」という命令に変える必要があります.
+
+そのためには, 2つ目のループをネストする必要があります.
+
+```processing
+for (int i = 0; i < movers.length; i++) {
+  // すべての Mover について, すべての Mover をチェック!
+  for (int j = 0; j < movers.length; j++) {
+    PVector force = movers[j].attract(movers[i]);
+    movers[i].applyForce(force);
+  }
+  movers[i].update();
+  movers[i].display();
+}
+```
+
