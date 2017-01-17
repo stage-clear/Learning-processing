@@ -27,7 +27,7 @@ class Liquid {
     float dragMagnitude = c * speed * speed;
     
     PVector dragForce = m.velocity.get();
-    dragForce.mult(-1)
+    dragForce.mult(-1);
     
     dragForce.normalize();
     dragForce.mult(dragMagnitude);
