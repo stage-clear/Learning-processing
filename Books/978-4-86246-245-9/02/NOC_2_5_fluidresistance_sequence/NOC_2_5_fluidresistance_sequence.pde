@@ -17,7 +17,7 @@ void draw() {
   
   liquid.display();
   
-  for (int = 0; i < movers.length; i++) {
+  for (int i = 0; i < movers.length; i++) {
     if (liquid.contains(movers[i])) {
       PVector dragForce = liquid.drag(movers[i]);
       movers[i].applyForce(dragForce);
@@ -28,7 +28,7 @@ void draw() {
     
     movers[i].update();
     movers[i].display();
-    movers[i].checkEdge();
+    movers[i].checkEdges();
   }
   
   fill(255);
