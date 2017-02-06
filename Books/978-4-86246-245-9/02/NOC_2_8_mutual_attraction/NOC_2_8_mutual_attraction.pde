@@ -18,7 +18,7 @@ void draw() {
   for (int i = 0; i < movers.length; i++) {
     for (int j = 0; j < movers.length; j++) {
       if (i != j) {
-        PVector force = movers[i].attract(movers[i]);
+        PVector force = movers[j].attract(movers[i]);
         movers[i].applyForce(force);
       }
     }
