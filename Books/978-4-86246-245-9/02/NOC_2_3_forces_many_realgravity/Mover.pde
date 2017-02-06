@@ -13,8 +13,13 @@ class Mover {
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
   }
-  
+
   void applyForce(PVector force) {
+    PVector f = PVector.div(force, mass);
+    acceleration.add(f);
+  }
+
+  void update() {
     velocity.add(acceleration);
     position.add(velocity);
     acceleration.mult(0);
@@ -33,7 +38,7 @@ class Mover {
       velocity.x *= -1;
     } else if (position.x < 0) {
       position.x = 0;
-      veloctity.x *= -1;
+      velocity.x *= -1;
     }
     
     if (position.y > height) {
