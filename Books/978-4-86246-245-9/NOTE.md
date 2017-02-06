@@ -38,8 +38,10 @@
   - `F→ = M * A→` `A→ = F→ / M`
 - __ニュートンの運動の第3法則__:
   - すべての作用には, 大きさが同じで向きが反対の反作用がある
+- __度数からラジアンに変換する方法__:
+  - `radian = 2 * PI * (degree / 360)`
 
-## Word
+## Words
 - __Location__ - 位置
 - __Position__ - 位置
 - __Velocity__ - 速度
@@ -55,7 +57,7 @@
   - すべて同じことを意味します
 - [誘導抗力](https://ja.wikipedia.org/wiki/%E7%BF%BC%E5%B9%85%E8%8D%B7%E9%87%8D) - 速度ベクトルの垂直方向にはたらく抗力:
  
-## Snippet
+## Snippets
 
 - __以前の軌跡を残す__
 ```processing
