@@ -7,10 +7,10 @@ class Mover {
   PVector acceleration;
   float mass;
   
-  Mover(float m, float x, float y) {
-    mass = m;
-    position = new PVector(x, y);
-    velocity = new PVector(0, 0);
+  Mover() {
+    mass = 1;
+    position = new PVector(400, 50);
+    velocity = new PVector(1, 0);
     acceleration = new PVector(0, 0);
   }
   
@@ -29,7 +29,7 @@ class Mover {
     stroke(0);
     strokeWeight(2);
     fill(0, 127);
-    ellipse(position.x, position.y, mass * 16, mass * 16);
+    ellipse(position.x, position.y, 16, 16);
   }
   
   void checkEdge() {
