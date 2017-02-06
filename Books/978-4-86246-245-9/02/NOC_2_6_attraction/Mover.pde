@@ -36,7 +36,7 @@ class Mover {
     if (position.x > width) {
       position.x = width;
       velocity.x *= -1;
-    } else if (positoin.x < 0) {
+    } else if (position.x < 0) {
       position.x = 0;
       velocity.x *= -1;
     }
