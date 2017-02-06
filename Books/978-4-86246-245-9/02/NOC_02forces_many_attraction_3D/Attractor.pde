@@ -4,7 +4,7 @@
 class Attractor {
   float mass;
   PVector position;
-  flaot g;
+  float g;
   
   Attractor() {
     position = new PVector(0, 0);
