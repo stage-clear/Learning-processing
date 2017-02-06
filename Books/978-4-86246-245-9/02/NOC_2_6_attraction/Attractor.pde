@@ -60,7 +60,7 @@ class Attractor {
   void drag() {
     if (dragging) {
       position.x = mouseX + dragOffset.x;
-      positoin.y = mouseY + dragOffset.y;
+      position.y = mouseY + dragOffset.y;
     }
   }
 }
