@@ -29,7 +29,7 @@ void draw() {
     }
     
     PVector force = a.attract(movers[i]);
-    movers[i].applyForce();
+    movers[i].applyForce(force);
     movers[i].update();
     movers[i].display();
   }
