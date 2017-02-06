@@ -18,7 +18,7 @@ void draw() {
     PVector wind = new PVector(0.01, 0);
     PVector gravity = new PVector(0, 0.1 * movers[i].mass);
     
-    float c = 0.05;
+    float c = 0.05; // <- Under the here is adding friction.
     PVector friction = movers[i].velocity.get();
     friction.mult(-1);
     friction.normalize();
