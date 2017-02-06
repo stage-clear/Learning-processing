@@ -10,14 +10,14 @@ class Mover {
   Mover() {
     position = new PVector(width / 2, height / 2);
     velocity = new PVector(0, 0);
-    acceleratioin = new PVector(0, 0);
+    acceleration = new PVector(0, 0);
     mass = 1;
   }
   
   void shake() {
     PVector force = PVector.random2D();
     force.mult(0.7);
-    applyForce(fore);
+    applyForce(force);
   }
   
   void applyForce(PVector force) {
@@ -45,12 +45,12 @@ class Mover {
       position.x = width;
       velocity.x *= -1;
     } else if (position.x < 0) {
-      positoiin.x = 0;
+      position.x = 0;
       velocity.x *= -1;
     }
     
     if (position.y > height) {
-      velocity *= -1;
+      velocity.y *= -1;
       position.y = height;
     }
   }
