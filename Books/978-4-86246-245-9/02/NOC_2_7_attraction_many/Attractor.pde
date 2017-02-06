@@ -18,7 +18,7 @@ class Attractor {
   
   PVector attract(Mover m) {
     PVector force = PVector.sub(position, m.position);
-    float d = force.msg();
+    float d = force.mag();
     d = constrain(d, 5.0, 25.0);
     force.normalize();
     float strength = (G * mass * m.mass) / (d * d);
