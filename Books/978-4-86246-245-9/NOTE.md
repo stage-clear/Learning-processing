@@ -43,6 +43,9 @@
   - すべての作用には, 大きさが同じで向きが反対の反作用がある
 - __度数からラジアンに変換する方法__:
   - `radian = 2 * PI * (degree / 360)`
+- __角度__:
+  - 角度 = 角度 + 角速度
+  - 角速度 = 角速度 + 角加速度
 
 ## Words
 - __Location__ - 位置
@@ -58,7 +61,10 @@
 - [垂直抗力](https://ja.wikipedia.org/wiki/%E5%9E%82%E7%9B%B4%E6%8A%97%E5%8A%9B) _normal force_(N) - 表面上を動く物体の運動に直交する力
 - [粘性力](https://ja.wikipedia.org/wiki/%E7%B2%98%E5%BA%A6) _viscous force_, [抗力](https://ja.wikipedia.org/wiki/%E6%8A%97%E5%8A%9B) _drag force_, [流体抵抗]() _fluid resistance_
   - すべて同じことを意味します
-- [誘導抗力](https://ja.wikipedia.org/wiki/%E7%BF%BC%E5%B9%85%E8%8D%B7%E9%87%8D) - 速度ベクトルの垂直方向にはたらく抗力:
+- [誘導抗力](https://ja.wikipedia.org/wiki/%E7%BF%BC%E5%B9%85%E8%8D%B7%E9%87%8D) - 速度ベクトルの垂直方向にはたらく抗力
+- [トルク](https://ja.wikipedia.org/wiki/%E3%83%88%E3%83%AB%E3%82%AF)
+- [慣性モーメント](https://ja.wikipedia.org/wiki/%E6%85%A3%E6%80%A7%E3%83%A2%E3%83%BC%E3%83%A1%E3%83%B3%E3%83%88)
+
  
 ## Snippets
 
