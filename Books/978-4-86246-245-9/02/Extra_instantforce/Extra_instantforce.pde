@@ -13,7 +13,7 @@ void setup() {
 void draw() {
   background(255);
   
-  float wx = map(noise(t), 0.1, -1, 1);
+  float wx = map(noise(t), 0, 1, -1, 1);
   PVector wind = new PVector(wx, 0);
   t += 0.01;
   line(width / 2, height / 2, width / 2 + wind.x * 100, height / 2 + wind.y * 100);
