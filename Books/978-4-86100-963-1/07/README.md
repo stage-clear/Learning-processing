@@ -301,7 +301,7 @@ class Cell {
   }
   
   void calcNextState() {
-    float total = 0; // <- 隣接セルの返金を計算
+    float total = 0; // <- 隣接セルの平均を計算
     for (int i = 0; i < neighbours.length; i++) {
       total += neighbours[i].state;
     }
@@ -364,7 +364,7 @@ class Agent {
 }
 ```
 
-あなたはエージェントの考えや感情を聞き出すことができます。それはおそらくこんな感じになるはずです[
+あなたはエージェントの考えや感情を聞き出すことができます。それはおそらくこんな感じになるはずです
 ```processing
 // 
 class Agent {
