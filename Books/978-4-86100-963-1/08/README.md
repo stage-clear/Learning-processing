@@ -172,10 +172,10 @@ class Branch {
     rot = random(360);
     lenChange = random(10) - 5;
     rotChange = random(10) - 5;
-    
-    updateMe() {
-      // ...
-    }
+  }
+
+  updateMe() {
+    // ...
   }
 }
 ```
