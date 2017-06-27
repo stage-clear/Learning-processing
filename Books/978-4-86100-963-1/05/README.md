@@ -369,7 +369,7 @@ void draw() {
   
   float s = 0;
   float t = 0;
-  flaot lastx = 0;
+  float lastx = 0;
   float lasty = 0;
   float lastz = 0;
   
